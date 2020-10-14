@@ -5,110 +5,88 @@
  * @format
  * @flow strict-local
  */
-
-import React from 'react';
+import 'react-native-gesture-handler';
+import * as React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+  Home,
+  DosenScreen,
+  AddMataKuliah,
+  AddDosen,
+  MataKuliah,
+  Ruang,
+  AddRuang,
+  Jam,
+  AddJam,
+  Hari,
+  AddHari,
+  Waktu,
+  AddWaktu,
+} from './routes';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const Stack = createStackNavigator();
 
-const App: () => React$Node = () => {
+function App({navigation}) {
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
+    <NavigationContainer>
+      <Stack.Navigator>
+        {/* Screen Home */}
+        <Stack.Screen
+          name="Home Screen"
+          component={Home}
+          options={{headerShown: false}}
+        />
+        {/* Screen Dosen  */}
+        <Stack.Screen
+          name="Dosen"
+          component={DosenScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen name="Add Dosen" component={AddDosen} />
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+        {/* Screen Matakuliah */}
+        <Stack.Screen
+          name="Matakuliah"
+          component={MataKuliah}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen name="Add Matakuliah" component={AddMataKuliah} />
+
+        {/* Screen Matakuliah */}
+        <Stack.Screen
+          name="Ruang"
+          component={Ruang}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen name="Add Ruang" component={AddRuang} />
+
+        {/* Screen Matakuliah */}
+        <Stack.Screen
+          name="Jam"
+          component={Jam}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen name="Add Jam" component={AddJam} />
+
+        {/* Screen Matakuliah */}
+        <Stack.Screen
+          name="Hari"
+          component={Hari}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen name="Add Hari" component={AddHari} />
+
+        {/* Screen Matakuliah */}
+        <Stack.Screen
+          name="WaktuTidakTersedia"
+          component={Waktu}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen name="Add Waktu" component={AddWaktu} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 export default App;
