@@ -11,6 +11,10 @@ import Hari from '../views/Hari';
 import AddHari from '../views/Hari/Add/add';
 import Waktu from '../views/WaktuTidakTersedia';
 import AddWaktu from '../views/WaktuTidakTersedia/Add/add';
+import WelcomePage from '../views/WelcomePage';
+import Login from '../views/Login';
+import Register from '../views/Register';
+
 export {
   Home,
   DosenScreen,
@@ -25,4 +29,7 @@ export {
   AddHari,
   Waktu,
   AddWaktu,
+  WelcomePage,
+  Login,
+  Register,
 };

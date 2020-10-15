@@ -24,6 +24,9 @@ import {
   AddHari,
   Waktu,
   AddWaktu,
+  WelcomePage,
+  Login,
+  Register,
 } from './routes';
 
 const Stack = createStackNavigator();
@@ -90,19 +93,47 @@ function App({navigation}) {
     AsyncStorage.storeData(obj, 'storeRuang');
   }
 
+  function setUpAccount() {
+    let obj = {
+      username: 'admin',
+      name: 'admin',
+      password: 'admin',
+    };
+    AsyncStorage.storeData(obj, 'setUpAccount');
+  }
+
   useEffect(() => {
     storeDosen();
     storeHari();
     storeJam();
     storeMatkul();
     storeRuang();
+    setUpAccount();
   }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        {/* Welcome Page */}
+        <Stack.Screen
+          name="Welcome"
+          component={WelcomePage}
+          options={{headerShown: false}}
+        />
+        {/* Login Page */}
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{headerShown: false}}
+        />
+        {/* Register Page */}
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{headerShown: false}}
+        />
         {/* Screen Home */}
         <Stack.Screen
-          name="Home Screen"
+          name="Home"
           component={Home}
           options={{headerShown: false}}
         />
