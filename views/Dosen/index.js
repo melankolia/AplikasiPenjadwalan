@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, Text, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, ScrollView} from 'react-native';
 import {
   DataTable,
   Headline,
@@ -8,31 +8,36 @@ import {
   IconButton,
   Colors,
 } from 'react-native-paper';
+import AsyncStorage from '../../Helper/AsyncStorage';
 import style from './index.style.js';
 
 const {container, titleContainerText, searchStyle, actionCell} = style;
 
 function HomeScreen({navigation}) {
-  const [value, setValue] = useState([
-    {nidn: '12345678', name: 'Dosen 1', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-  ]);
-
+  const [value, setValue] = useState([]);
   const [search, setSearch] = useState('');
+
+  const handleGetData = async () => {
+    let data = await AsyncStorage.getData('storeDosen');
+    setValue(data);
+  };
+
+  const handleRemove = (index) => {
+    let filtered = value.filter((e, i) => i !== index);
+    setValue(filtered);
+    AsyncStorage.storeData(filtered, 'storeDosen');
+  };
+
+  useEffect(() => {
+    handleGetData();
+  }, []);
 
   return (
     <View style={container}>
-      <View style={titleContainerText}>
-        <Headline>Dosen</Headline>
-      </View>
       <View>
+        <View style={titleContainerText}>
+          <Headline>Dosen</Headline>
+        </View>
         <TextInput
           mode="outlined"
           label="Search"
@@ -50,27 +55,33 @@ function HomeScreen({navigation}) {
           </DataTable.Header>
 
           <ScrollView>
-            {value.map((val, index) => (
-              <DataTable.Row key={index}>
-                <DataTable.Cell>{val.nidn}</DataTable.Cell>
-                <DataTable.Cell>{val.name}</DataTable.Cell>
-                <DataTable.Cell>{val.telp}</DataTable.Cell>
-                <DataTable.Cell style={actionCell}>
-                  <IconButton
-                    icon="pencil"
-                    color={Colors.blueA700}
-                    size={20}
-                    onPress={() => console.log('Pressed')}
-                  />
-                  <IconButton
-                    icon="delete"
-                    color={Colors.red400}
-                    size={20}
-                    onPress={() => console.log('Pressed')}
-                  />
-                </DataTable.Cell>
+            {value.length > 0 ? (
+              value.map((val, index) => (
+                <DataTable.Row key={index}>
+                  <DataTable.Cell>{val.nidn}</DataTable.Cell>
+                  <DataTable.Cell>{val.name}</DataTable.Cell>
+                  <DataTable.Cell>{val.telp}</DataTable.Cell>
+                  <DataTable.Cell style={actionCell}>
+                    <IconButton
+                      icon="pencil"
+                      color={Colors.blueA700}
+                      size={20}
+                      onPress={() => console.log('Pressed')}
+                    />
+                    <IconButton
+                      icon="delete"
+                      color={Colors.red400}
+                      size={20}
+                      onPress={() => handleRemove(index)}
+                    />
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))
+            ) : (
+              <DataTable.Row style={actionCell}>
+                <DataTable.Cell>No Data Available</DataTable.Cell>
               </DataTable.Row>
-            ))}
+            )}
           </ScrollView>
 
           <DataTable.Pagination
@@ -88,7 +99,7 @@ function HomeScreen({navigation}) {
           icon="plus"
           mode="contained"
           color={Colors.blueA700}
-          onPress={() => navigation.navigate('Add Dosen')}>
+          onPress={() => navigation.replace('Add Dosen')}>
           Add Dosen
         </Button>
       </View>

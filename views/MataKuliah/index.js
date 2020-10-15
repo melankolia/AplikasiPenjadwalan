@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, ScrollView} from 'react-native';
 import {
   DataTable,
@@ -8,36 +8,36 @@ import {
   IconButton,
   Colors,
 } from 'react-native-paper';
+import AsyncStorage from '../../Helper/AsyncStorage';
 import style from './index.style.js';
 
 const {container, titleContainerText, searchStyle, actionCell} = style;
 
 function HomeScreen({navigation}) {
-  const [value, setValue] = useState([
-    {
-      codeMk: 'SK421',
-      name: 'Interaksi Manusia dan Komputer',
-      sks: 3,
-      semester: 7,
-      jenis: 'Teori',
-    },
-    {
-      codeMk: 'SK123',
-      name: 'Kriptografi',
-      sks: 3,
-      semester: 7,
-      jenis: 'Teori',
-    },
-  ]);
-
+  const [value, setValue] = useState([]);
   const [search, setSearch] = useState('');
+
+  const handleGetData = async () => {
+    let data = await AsyncStorage.getData('storeMatkul');
+    setValue(data);
+  };
+
+  const handleRemove = (index) => {
+    let filtered = value.filter((e, i) => i !== index);
+    setValue(filtered);
+    AsyncStorage.storeData(filtered, 'storeMatkul');
+  };
+
+  useEffect(() => {
+    handleGetData();
+  }, []);
 
   return (
     <View style={container}>
-      <View style={titleContainerText}>
-        <Headline>Mata Kuliah</Headline>
-      </View>
       <View>
+        <View style={titleContainerText}>
+          <Headline>Mata Kuliah</Headline>
+        </View>
         <TextInput
           mode="outlined"
           label="Search"
@@ -59,31 +59,37 @@ function HomeScreen({navigation}) {
           </DataTable.Header>
 
           <ScrollView>
-            {value.map((val, index) => (
-              <DataTable.Row key={index}>
-                <DataTable.Cell>{val.codeMk}</DataTable.Cell>
-                <DataTable.Cell>{val.name}</DataTable.Cell>
-                <DataTable.Cell numeric>{val.sks}</DataTable.Cell>
-                <DataTable.Cell numeric style={actionCell}>
-                  {val.semester}
-                </DataTable.Cell>
-                <DataTable.Cell>{val.jenis}</DataTable.Cell>
-                <DataTable.Cell style={actionCell}>
-                  <IconButton
-                    icon="pencil"
-                    color={Colors.blueA700}
-                    size={20}
-                    onPress={() => console.log('Pressed')}
-                  />
-                  <IconButton
-                    icon="delete"
-                    color={Colors.red400}
-                    size={20}
-                    onPress={() => console.log('Pressed')}
-                  />
-                </DataTable.Cell>
+            {value.length > 0 ? (
+              value.map((val, index) => (
+                <DataTable.Row key={index}>
+                  <DataTable.Cell>{val.codeMk}</DataTable.Cell>
+                  <DataTable.Cell>{val.name}</DataTable.Cell>
+                  <DataTable.Cell numeric>{val.sks}</DataTable.Cell>
+                  <DataTable.Cell numeric style={actionCell}>
+                    {val.semester}
+                  </DataTable.Cell>
+                  <DataTable.Cell>{val.jenis}</DataTable.Cell>
+                  <DataTable.Cell style={actionCell}>
+                    <IconButton
+                      icon="pencil"
+                      color={Colors.blueA700}
+                      size={20}
+                      onPress={() => console.log('Pressed')}
+                    />
+                    <IconButton
+                      icon="delete"
+                      color={Colors.red400}
+                      size={20}
+                      onPress={() => handleRemove(index)}
+                    />
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))
+            ) : (
+              <DataTable.Row style={actionCell}>
+                <DataTable.Cell>No Data Available</DataTable.Cell>
               </DataTable.Row>
-            ))}
+            )}
           </ScrollView>
 
           <DataTable.Pagination
@@ -101,7 +107,7 @@ function HomeScreen({navigation}) {
           icon="plus"
           mode="contained"
           color={Colors.blueA700}
-          onPress={() => navigation.navigate('Add Matakuliah')}>
+          onPress={() => navigation.replace('Add Matakuliah')}>
           Add Matakuliah
         </Button>
       </View>

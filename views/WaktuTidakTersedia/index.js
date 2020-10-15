@@ -29,10 +29,10 @@ function HomeScreen({navigation}) {
 
   return (
     <View style={container}>
-      <View style={titleContainerText}>
-        <Headline>Waktu Tidak Tersedia</Headline>
-      </View>
       <View>
+        <View style={titleContainerText}>
+          <Headline>Waktu Tidak Tersedia</Headline>
+        </View>
         <TextInput
           mode="outlined"
           label="Search"
@@ -50,27 +50,33 @@ function HomeScreen({navigation}) {
           </DataTable.Header>
 
           <ScrollView>
-            {value.map((val, index) => (
-              <DataTable.Row key={index}>
-                <DataTable.Cell>{val.nidn}</DataTable.Cell>
-                <DataTable.Cell>{val.name}</DataTable.Cell>
-                <DataTable.Cell>{val.telp}</DataTable.Cell>
-                <DataTable.Cell style={actionCell}>
-                  <IconButton
-                    icon="pencil"
-                    color={Colors.blueA700}
-                    size={20}
-                    onPress={() => console.log('Pressed')}
-                  />
-                  <IconButton
-                    icon="delete"
-                    color={Colors.red400}
-                    size={20}
-                    onPress={() => console.log('Pressed')}
-                  />
-                </DataTable.Cell>
+            {value.length > 0 ? (
+              value.map((val, index) => (
+                <DataTable.Row key={index}>
+                  <DataTable.Cell>{val.nidn}</DataTable.Cell>
+                  <DataTable.Cell>{val.name}</DataTable.Cell>
+                  <DataTable.Cell>{val.telp}</DataTable.Cell>
+                  <DataTable.Cell style={actionCell}>
+                    <IconButton
+                      icon="pencil"
+                      color={Colors.blueA700}
+                      size={20}
+                      onPress={() => console.log('Pressed')}
+                    />
+                    <IconButton
+                      icon="delete"
+                      color={Colors.red400}
+                      size={20}
+                      onPress={() => console.log('Pressed')}
+                    />
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))
+            ) : (
+              <DataTable.Row style={actionCell}>
+                <DataTable.Cell>No Data Available</DataTable.Cell>
               </DataTable.Row>
-            ))}
+            )}
           </ScrollView>
 
           <DataTable.Pagination

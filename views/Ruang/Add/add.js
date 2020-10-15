@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
+import AsyncStorage from '../../../Helper/AsyncStorage';
 import {TextInput, Colors, Button} from 'react-native-paper';
 
 import style from './index.style.js';
@@ -10,6 +11,13 @@ const Add = ({navigation}) => {
   const [name, setName] = useState('');
   const [capacity, setCapacity] = useState('');
   const [type, setType] = useState('');
+
+  const handleAddData = async () => {
+    let data = await AsyncStorage.getData('storeRuang');
+    let obj = [...data, {name, capacity, type}];
+    AsyncStorage.storeData(obj, 'storeRuang');
+    navigation.replace('Ruang');
+  };
 
   return (
     <View style={container}>
@@ -47,7 +55,7 @@ const Add = ({navigation}) => {
           icon="content-save"
           mode="contained"
           color={Colors.blueA700}
-          onPress={() => console.log('ADD DOSEN')}>
+          onPress={() => handleAddData()}>
           Save
         </Button>
       </View>

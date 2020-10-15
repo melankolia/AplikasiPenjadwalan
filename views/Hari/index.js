@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, ScrollView} from 'react-native';
 import {
   DataTable,
@@ -8,27 +8,36 @@ import {
   IconButton,
   Colors,
 } from 'react-native-paper';
+import AsyncStorage from '../../Helper/AsyncStorage';
 import style from './index.style.js';
 
 const {container, titleContainerText, searchStyle, actionCell} = style;
 
 function HomeScreen({navigation}) {
-  const [value, setValue] = useState([
-    {no: '1', hari: 'Senin'},
-    {no: '2', hari: 'Selasa'},
-    {no: '3', hari: 'Rabu'},
-    {no: '4', hari: 'Kamis'},
-    {no: '5', hari: 'Jumat'},
-  ]);
-
+  const [value, setValue] = useState([]);
   const [search, setSearch] = useState('');
+
+  const handleGetData = async () => {
+    let data = await AsyncStorage.getData('storeHari');
+    setValue(data);
+  };
+
+  const handleRemove = (index) => {
+    let filtered = value.filter((e, i) => i !== index);
+    setValue(filtered);
+    AsyncStorage.storeData(filtered, 'storeHari');
+  };
+
+  useEffect(() => {
+    handleGetData();
+  }, []);
 
   return (
     <View style={container}>
-      <View style={titleContainerText}>
-        <Headline>Hari</Headline>
-      </View>
       <View>
+        <View style={titleContainerText}>
+          <Headline>Hari</Headline>
+        </View>
         <TextInput
           mode="outlined"
           label="Search"
@@ -45,26 +54,32 @@ function HomeScreen({navigation}) {
           </DataTable.Header>
 
           <ScrollView>
-            {value.map((val, index) => (
-              <DataTable.Row key={index}>
-                <DataTable.Cell>{val.no}</DataTable.Cell>
-                <DataTable.Cell>{val.hari}</DataTable.Cell>
-                <DataTable.Cell style={actionCell}>
-                  <IconButton
-                    icon="pencil"
-                    color={Colors.blueA700}
-                    size={20}
-                    onPress={() => console.log('Pressed')}
-                  />
-                  <IconButton
-                    icon="delete"
-                    color={Colors.red400}
-                    size={20}
-                    onPress={() => console.log('Pressed')}
-                  />
-                </DataTable.Cell>
+            {value.length > 0 ? (
+              value.map((val, index) => (
+                <DataTable.Row key={index}>
+                  <DataTable.Cell>{val.no}</DataTable.Cell>
+                  <DataTable.Cell>{val.hari}</DataTable.Cell>
+                  <DataTable.Cell style={actionCell}>
+                    <IconButton
+                      icon="pencil"
+                      color={Colors.blueA700}
+                      size={20}
+                      onPress={() => console.log('Pressed')}
+                    />
+                    <IconButton
+                      icon="delete"
+                      color={Colors.red400}
+                      size={20}
+                      onPress={() => handleRemove(index)}
+                    />
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))
+            ) : (
+              <DataTable.Row style={actionCell}>
+                <DataTable.Cell>No Data Available</DataTable.Cell>
               </DataTable.Row>
-            ))}
+            )}
           </ScrollView>
 
           <DataTable.Pagination
@@ -82,7 +97,7 @@ function HomeScreen({navigation}) {
           icon="plus"
           mode="contained"
           color={Colors.blueA700}
-          onPress={() => navigation.navigate('Add Hari')}>
+          onPress={() => navigation.replace('Add Hari')}>
           Add Hari
         </Button>
       </View>

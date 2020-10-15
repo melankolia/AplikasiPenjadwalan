@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {TextInput, Colors, Button} from 'react-native-paper';
+import AsyncStorage from '../../../Helper/AsyncStorage';
 
 import style from './index.style.js';
 
@@ -12,6 +13,13 @@ const Add = ({navigation}) => {
   const [category, setCategory] = useState('');
   const [sks, setSKS] = useState('');
   const [semester, setSemester] = useState('');
+
+  const handleAddData = async () => {
+    let data = await AsyncStorage.getData('storeMatkul');
+    let obj = [...data, {codeMk: code, name, sks, semester, jenis: category}];
+    AsyncStorage.storeData(obj, 'storeMatkul');
+    navigation.replace('Matakuliah');
+  };
 
   return (
     <View style={container}>
@@ -67,7 +75,7 @@ const Add = ({navigation}) => {
           icon="content-save"
           mode="contained"
           color={Colors.blueA700}
-          onPress={() => console.log('ADD MATAKULIAH')}>
+          onPress={() => handleAddData()}>
           Save
         </Button>
       </View>
