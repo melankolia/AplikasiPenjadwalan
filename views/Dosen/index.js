@@ -11,9 +11,16 @@ import {
 import AsyncStorage from '../../Helper/AsyncStorage';
 import style from './index.style.js';
 
-const {container, titleContainerText, searchStyle, actionCell} = style;
+const {
+  container,
+  titleContainerText,
+  searchStyle,
+  headerStyle,
+  actionCell,
+  addButton,
+} = style;
 
-function HomeScreen({navigation}) {
+function DosenScreen({navigation}) {
   const [value, setValue] = useState([]);
   const [search, setSearch] = useState('');
 
@@ -36,18 +43,18 @@ function HomeScreen({navigation}) {
     <View style={container}>
       <View>
         <View style={titleContainerText}>
-          <Headline>Dosen</Headline>
+          <Headline style={headerStyle}>Dosen</Headline>
+          <TextInput
+            label="Search"
+            value={search}
+            onChangeText={(text) => setSearch(text)}
+            style={searchStyle}
+            dense
+          />
         </View>
-        <TextInput
-          mode="outlined"
-          label="Search"
-          value={search}
-          onChangeText={(text) => setSearch(text)}
-          style={searchStyle}
-          dense
-        />
         <DataTable>
           <DataTable.Header>
+            {/* // ROW */}
             <DataTable.Title>NIDN</DataTable.Title>
             <DataTable.Title>Nama</DataTable.Title>
             <DataTable.Title>Telp</DataTable.Title>
@@ -99,6 +106,7 @@ function HomeScreen({navigation}) {
           icon="plus"
           mode="contained"
           color={Colors.blueA700}
+          style={addButton}
           onPress={() => navigation.replace('Add Dosen')}>
           Add Dosen
         </Button>
@@ -107,4 +115,4 @@ function HomeScreen({navigation}) {
   );
 }
 
-export default HomeScreen;
+export default DosenScreen;

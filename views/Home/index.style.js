@@ -19,7 +19,7 @@ const style = StyleSheet.create({
     fontSize: 24,
     color: '#FFFF',
     margin: 24,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
 });
 

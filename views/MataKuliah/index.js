@@ -11,9 +11,16 @@ import {
 import AsyncStorage from '../../Helper/AsyncStorage';
 import style from './index.style.js';
 
-const {container, titleContainerText, searchStyle, actionCell} = style;
+const {
+  container,
+  titleContainerText,
+  searchStyle,
+  headerStyle,
+  actionCell,
+  addButton,
+} = style;
 
-function HomeScreen({navigation}) {
+function MatakuliahScreen({navigation}) {
   const [value, setValue] = useState([]);
   const [search, setSearch] = useState('');
 
@@ -36,16 +43,15 @@ function HomeScreen({navigation}) {
     <View style={container}>
       <View>
         <View style={titleContainerText}>
-          <Headline>Mata Kuliah</Headline>
+          <Headline style={headerStyle}>Matakuliah</Headline>
+          <TextInput
+            label="Search"
+            value={search}
+            onChangeText={(text) => setSearch(text)}
+            style={searchStyle}
+            dense
+          />
         </View>
-        <TextInput
-          mode="outlined"
-          label="Search"
-          value={search}
-          onChangeText={(text) => setSearch(text)}
-          style={searchStyle}
-          dense
-        />
         <DataTable>
           <DataTable.Header>
             <DataTable.Title>Kode MK</DataTable.Title>
@@ -107,6 +113,7 @@ function HomeScreen({navigation}) {
           icon="plus"
           mode="contained"
           color={Colors.blueA700}
+          style={addButton}
           onPress={() => navigation.replace('Add Matakuliah')}>
           Add Matakuliah
         </Button>
@@ -115,4 +122,4 @@ function HomeScreen({navigation}) {
   );
 }
 
-export default HomeScreen;
+export default MatakuliahScreen;

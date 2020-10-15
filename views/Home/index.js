@@ -17,7 +17,7 @@ const Home = ({navigation}) => {
         <TouchableOpacity
           onPress={() => navigation.navigate('Matakuliah')}
           style={[box, {backgroundColor: '#043a67'}]}>
-          <Text style={textMenu}>Mata Kuliah</Text>
+          <Text style={textMenu}>Matakuliah</Text>
         </TouchableOpacity>
         {/* <TouchableOpacity
           onPress={() => navigation.navigate('Dosen')}
@@ -40,9 +40,9 @@ const Home = ({navigation}) => {
           <Text style={textMenu}>Hari</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          // onPress={() => navigation.navigate('WaktuTidakTersedia')}
+          onPress={() => navigation.navigate('WaktuTidakTersedia')}
           style={[box, {backgroundColor: Colors.red500}]}>
-          <Text style={textMenu}>Waktu Tidak Tersedia</Text>
+          <Text style={textMenu}>Waktu Tidak Bersedia</Text>
         </TouchableOpacity>
       </ScrollView>
     </>

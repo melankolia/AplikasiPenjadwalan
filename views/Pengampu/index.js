@@ -10,7 +10,13 @@ import {
 } from 'react-native-paper';
 import style from './index.style.js';
 
-const {container, titleContainerText, searchStyle, actionCell} = style;
+const {
+  container,
+  titleContainerText,
+  searchStyle,
+  actionCell,
+  addButton,
+} = style;
 
 function HomeScreen({navigation}) {
   const [value, setValue] = useState([
@@ -94,6 +100,7 @@ function HomeScreen({navigation}) {
           icon="plus"
           mode="contained"
           color={Colors.blueA700}
+          style={addButton}
           onPress={() => navigation.navigate('Add Dosen')}>
           Add Pengampu
         </Button>

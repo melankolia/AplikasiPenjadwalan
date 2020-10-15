@@ -31,7 +31,7 @@ const Stack = createStackNavigator();
 function App({navigation}) {
   function storeDosen() {
     let obj = [
-      {nidn: '12345678', name: 'Dosen 1', telp: '08127803910'},
+      {nidn: '12345678', name: 'Fali', telp: '08127803910'},
       {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
       {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
       {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},

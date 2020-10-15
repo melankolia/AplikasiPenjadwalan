@@ -1,29 +1,32 @@
 import React, {useState} from 'react';
-import {View, ScrollView} from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import {
   DataTable,
   Headline,
   TextInput,
-  Button,
   IconButton,
   Colors,
 } from 'react-native-paper';
 import style from './index.style.js';
 
-const {container, titleContainerText, searchStyle, actionCell} = style;
+const {
+  container,
+  titleContainerText,
+  searchStyle,
+  headerStyle,
+  actionCell,
+} = style;
 
 function HomeScreen({navigation}) {
   const [value, setValue] = useState([
-    {nidn: '12345678', name: 'Dosen 1', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-    {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
+    {hari: 'Senin', jam: '08:00 - 08:30', status: false},
+    {hari: 'Selasa', jam: '08:30 - 09:00', status: false},
+    {hari: 'Rabu', jam: '09:00 - 09:30', status: false},
+    {hari: 'Kamis', jam: '09:30 - 10:00', status: false},
   ]);
+
+  const [check, setCheck] = useState(false);
 
   const [search, setSearch] = useState('');
 
@@ -31,43 +34,35 @@ function HomeScreen({navigation}) {
     <View style={container}>
       <View>
         <View style={titleContainerText}>
-          <Headline>Waktu Tidak Tersedia</Headline>
+          <Headline style={headerStyle}>Waktu Tidak Tersedia</Headline>
+          <TextInput
+            label="Search"
+            value={search}
+            onChangeText={(text) => setSearch(text)}
+            style={searchStyle}
+            dense
+          />
         </View>
-        <TextInput
-          mode="outlined"
-          label="Search"
-          value={search}
-          onChangeText={(text) => setSearch(text)}
-          style={searchStyle}
-          dense
-        />
         <DataTable>
           <DataTable.Header>
-            <DataTable.Title>NIDN</DataTable.Title>
-            <DataTable.Title>Nama</DataTable.Title>
-            <DataTable.Title>Telp</DataTable.Title>
-            <DataTable.Title style={actionCell}>Action</DataTable.Title>
+            <DataTable.Title>Hari</DataTable.Title>
+            <DataTable.Title>Jam</DataTable.Title>
+            <DataTable.Title style={actionCell}>Status</DataTable.Title>
           </DataTable.Header>
 
           <ScrollView>
             {value.length > 0 ? (
               value.map((val, index) => (
                 <DataTable.Row key={index}>
-                  <DataTable.Cell>{val.nidn}</DataTable.Cell>
-                  <DataTable.Cell>{val.name}</DataTable.Cell>
-                  <DataTable.Cell>{val.telp}</DataTable.Cell>
+                  <DataTable.Cell>{val.hari}</DataTable.Cell>
+                  <DataTable.Cell>{val.jam}</DataTable.Cell>
                   <DataTable.Cell style={actionCell}>
-                    <IconButton
-                      icon="pencil"
-                      color={Colors.blueA700}
-                      size={20}
-                      onPress={() => console.log('Pressed')}
-                    />
-                    <IconButton
-                      icon="delete"
-                      color={Colors.red400}
-                      size={20}
-                      onPress={() => console.log('Pressed')}
+                    <CheckBox
+                      disabled={false}
+                      value={check}
+                      onValueChange={(newValue) => {
+                        setCheck(newValue);
+                      }}
                     />
                   </DataTable.Cell>
                 </DataTable.Row>
@@ -88,15 +83,6 @@ function HomeScreen({navigation}) {
             label="1-3 of 3"
           />
         </DataTable>
-      </View>
-      <View>
-        <Button
-          icon="plus"
-          mode="contained"
-          color={Colors.blueA700}
-          onPress={() => navigation.navigate('Add Dosen')}>
-          Add Dosen
-        </Button>
       </View>
     </View>
   );

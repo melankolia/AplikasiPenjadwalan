@@ -14,15 +14,12 @@ const style = StyleSheet.create({
   searchStyle: {
     marginHorizontal: '5%',
   },
-  footerContainer: {
-    height: 60,
-    // borderColor: 'red',
-    // borderWidth: 4,
-    backgroundColor: '#fdcd37',
-    marginTop: 20,
-  },
+
   actionCell: {
     justifyContent: 'center',
+  },
+  addButton: {
+    paddingVertical: 4,
   },
 });
 

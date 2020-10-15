@@ -5,7 +5,7 @@ import {TextInput, Colors, Button} from 'react-native-paper';
 
 import style from './index.style.js';
 
-const {container, searchStyleTop, textContainer} = style;
+const {container, searchStyleTop, textContainer, addButton} = style;
 
 const Add = ({navigation}) => {
   const [hari, setHari] = useState('');
@@ -35,6 +35,7 @@ const Add = ({navigation}) => {
           icon="content-save"
           mode="contained"
           color={Colors.blueA700}
+          style={addButton}
           onPress={() => handleAddData()}>
           Save
         </Button>

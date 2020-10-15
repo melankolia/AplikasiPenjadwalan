@@ -6,23 +6,26 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
   },
   titleContainerText: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 30,
-    marginBottom: 20,
+    paddingVertical: 30,
+    marginBottom: 30,
+    paddingHorizontal: '5%',
+    backgroundColor: '#072446',
+    // borderColor: 'red',
+    // borderWidth: 2,
   },
   searchStyle: {
-    marginHorizontal: '5%',
+    marginVertical: 20,
   },
-  footerContainer: {
-    height: 60,
-    // borderColor: 'red',
-    // borderWidth: 4,
-    backgroundColor: '#fdcd37',
-    marginTop: 20,
+  headerStyle: {
+    alignSelf: 'flex-start',
+    fontWeight: 'bold',
+    color: 'white',
   },
   actionCell: {
     justifyContent: 'center',
+  },
+  addButton: {
+    paddingVertical: 4,
   },
 });
 

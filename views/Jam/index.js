@@ -11,7 +11,14 @@ import {
 import AsyncStorage from '../../Helper/AsyncStorage';
 import style from './index.style.js';
 
-const {container, titleContainerText, searchStyle, actionCell} = style;
+const {
+  container,
+  titleContainerText,
+  searchStyle,
+  headerStyle,
+  actionCell,
+  addButton,
+} = style;
 
 function HomeScreen({navigation}) {
   const [value, setValue] = useState([]);
@@ -36,16 +43,15 @@ function HomeScreen({navigation}) {
     <View style={container}>
       <View>
         <View style={titleContainerText}>
-          <Headline>Jam</Headline>
+          <Headline style={headerStyle}>Jam</Headline>
+          <TextInput
+            label="Search"
+            value={search}
+            onChangeText={(text) => setSearch(text)}
+            style={searchStyle}
+            dense
+          />
         </View>
-        <TextInput
-          mode="outlined"
-          label="Search"
-          value={search}
-          onChangeText={(text) => setSearch(text)}
-          style={searchStyle}
-          dense
-        />
         <DataTable>
           <DataTable.Header>
             <DataTable.Title>No</DataTable.Title>
@@ -97,6 +103,7 @@ function HomeScreen({navigation}) {
           icon="plus"
           mode="contained"
           color={Colors.blueA700}
+          style={addButton}
           onPress={() => navigation.replace('Add Jam')}>
           Add Jam
         </Button>
