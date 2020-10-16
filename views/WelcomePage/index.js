@@ -16,12 +16,10 @@ const {
 const Started = ({navigation}) => {
   return (
     <View style={container}>
-      <Text style={firstTitle}>
-        Atur jadwal kuliah jurusan anda, praktis dan gratis
-      </Text>
+      <Text style={firstTitle}>Atur jadwal kuliah jurusan anda, praktis</Text>
       <Text style={secondTitle}>
-        Aplikasi ini akan memudahkan anda mengatur jadwal kuliah yang biasanya
-        menyusahkan
+        Aplikasi ini akan memudahkan anda mengatur jadwal matakuliah yang
+        biasanya menyusahkan
       </Text>
       <Image
         style={imageStyle}
