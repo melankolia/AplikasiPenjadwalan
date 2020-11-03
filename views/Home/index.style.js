@@ -20,7 +20,16 @@ const style = StyleSheet.create({
     fontSize: 24,
     color: '#FFFF',
     margin: 24,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+  },
+  boxButton: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  buttonBottom: {
+    height: 40,
+    marginBottom: 10,
+    width: '90%',
   },
 });
 

@@ -30,10 +30,10 @@ function HomeScreen({navigation}) {
   //   setValue(data);
   // };
 
-  const handleGetData = async () => {
+  const handleGetData = async (params) => {
     try {
       let payload = {
-        nama_ruang: search,
+        nama_ruang: params,
       };
       await AppService.getRuang(payload)
         .then(({data: {result, message}}) => {
@@ -58,8 +58,8 @@ function HomeScreen({navigation}) {
   };
 
   useEffect(() => {
-    handleGetData();
-  }, []);
+    handleGetData(search);
+  }, [search]);
 
   return (
     <View style={container}>

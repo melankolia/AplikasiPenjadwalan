@@ -30,10 +30,10 @@ function MatakuliahScreen({navigation}) {
   //   setValue(data);
   // };
 
-  const handleGetData = async () => {
+  const handleGetData = async (params) => {
     try {
       let payload = {
-        name_mk: search,
+        name_mk: params,
       };
       await AppService.getMatkul(payload)
         .then(({data: {result, message}}) => {
@@ -58,8 +58,8 @@ function MatakuliahScreen({navigation}) {
   };
 
   useEffect(() => {
-    handleGetData();
-  }, []);
+    handleGetData(search);
+  }, [search]);
 
   return (
     <View style={container}>

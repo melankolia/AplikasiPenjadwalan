@@ -30,15 +30,14 @@ function HomeScreen({navigation}) {
   //   setValue(data);
   // };
 
-  const handleGetData = async () => {
+  const handleGetData = async (params) => {
     try {
       let payload = {
-        nama_ruang: search,
+        name_hari: params,
       };
       await AppService.getHari(payload)
         .then(({data: {result, message}}) => {
           if (message === 'OK') {
-            console.log(result);
             setValue(result);
           } else {
             Alert.alert('Error', 'Gagal Mendapatkan Data Hari');
@@ -59,8 +58,8 @@ function HomeScreen({navigation}) {
   };
 
   useEffect(() => {
-    handleGetData();
-  }, []);
+    handleGetData(search);
+  }, [search]);
 
   return (
     <View style={container}>

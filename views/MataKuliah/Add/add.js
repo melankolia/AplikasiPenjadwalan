@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {View, Alert} from 'react-native';
 import {TextInput, Colors, Button} from 'react-native-paper';
 import AsyncStorage from '../../../Helper/AsyncStorage';
+import AppService from '../../../services/resources/app.service';
 
 import style from './index.style.js';
 
@@ -13,12 +14,42 @@ const Add = ({navigation}) => {
   const [category, setCategory] = useState('');
   const [sks, setSKS] = useState('');
   const [semester, setSemester] = useState('');
+  const [NIDN_Dosen, setNIDN_Dosen] = useState('');
+
+  // const handleAddData = async () => {
+  //   let data = await AsyncStorage.getData('storeMatkul');
+  //   let obj = [...data, {codeMk: code, name, sks, semester, jenis: category}];
+  //   AsyncStorage.storeData(obj, 'storeMatkul');
+  //   navigation.replace('Matakuliah');
+  // };
 
   const handleAddData = async () => {
-    let data = await AsyncStorage.getData('storeMatkul');
-    let obj = [...data, {codeMk: code, name, sks, semester, jenis: category}];
-    AsyncStorage.storeData(obj, 'storeMatkul');
-    navigation.replace('Matakuliah');
+    try {
+      let payload = {
+        kode_mk: code,
+        name_mk: name,
+        jenis: category,
+        sks: sks,
+        semester: semester,
+        nidn_dosen: NIDN_Dosen,
+      };
+      await AppService.createMatkul(payload)
+        .then(({data: {message, result}}) => {
+          if (message === 'OK') {
+            Alert.alert('Berhasil', 'Mata Kuliah Berhasil Ditambahkan', [
+              {text: 'OK', onPress: () => navigation.replace('Matakuliah')},
+            ]);
+          } else {
+            Alert.alert('Gagal Create Matakuliah', 'Form Mohon Diisi');
+            console.log(result);
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      Alert.alert('Gagal Create Matakuliah', 'Form Mohon Diisi');
+    }
   };
 
   return (
@@ -44,7 +75,7 @@ const Add = ({navigation}) => {
         />
         <TextInput
           mode="outlined"
-          label="Category"
+          label="Jenis"
           value={category}
           onChangeText={(text) => setCategory(text)}
           style={searchStyle}
@@ -68,6 +99,15 @@ const Add = ({navigation}) => {
           style={searchStyle}
           dense
           placeholder="Input Semester"
+        />
+        <TextInput
+          mode="outlined"
+          label="Dosen Pengampu"
+          value={NIDN_Dosen}
+          onChangeText={(text) => setNIDN_Dosen(text)}
+          style={searchStyle}
+          dense
+          placeholder="NIDN Dosen"
         />
       </View>
       <View>

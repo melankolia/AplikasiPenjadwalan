@@ -31,10 +31,10 @@ function DosenScreen({navigation}) {
   //   setValue(data);
   // };
 
-  const handleGetData = async () => {
+  const handleGetData = async (params) => {
     try {
       let payload = {
-        nama_dosen: search,
+        nama_dosen: params,
       };
       await AppService.getDosen(payload)
         .then(({data: {result, message}}) => {
@@ -59,8 +59,8 @@ function DosenScreen({navigation}) {
   };
 
   useEffect(() => {
-    handleGetData();
-  }, []);
+    handleGetData(search);
+  }, [search]);
 
   return (
     <View style={container}>
