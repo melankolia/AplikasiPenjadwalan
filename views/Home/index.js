@@ -84,18 +84,26 @@ const Home = ({navigation}) => {
             </TouchableOpacity>
           </>
         )}
-        {stack === 'exception' && (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('WaktuTidakTersedia')}
-            style={[box, {backgroundColor: Colors.red500}]}>
-            <Text style={textMenu}>Waktu Tidak Bersedia</Text>
-          </TouchableOpacity>
+        {stack === 'sesiCreated' && (
+          <>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Sesi')}
+              style={[box, {backgroundColor: Colors.blue400}]}>
+              <Text style={textMenu}>Sesi</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('WaktuTidakTersedia')}
+              style={[box, {backgroundColor: Colors.red500}]}>
+              <Text style={textMenu}>Waktu Tidak Bersedia</Text>
+            </TouchableOpacity>
+          </>
         )}
       </ScrollView>
       {stack === 'initial' && (
-        <View>
+        <View style={boxButton}>
           <Button
             mode="contained"
+            style={buttonBottom}
             color={Colors.blueA700}
             onPress={(e) => setStack('createSesi')}>
             Next

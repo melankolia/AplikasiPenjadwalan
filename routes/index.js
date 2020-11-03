@@ -15,6 +15,7 @@ import WelcomePage from '../views/WelcomePage';
 import Login from '../views/Login';
 import Register from '../views/Register';
 import test1 from '../views/test1';
+import Sesi from '../views/Sesi';
 
 export {
   Home,
@@ -33,5 +34,6 @@ export {
   WelcomePage,
   Login,
   Register,
-  test1
+  test1,
+  Sesi,
 };

@@ -25,6 +25,7 @@ const {
 function DosenScreen({navigation}) {
   const [value, setValue] = useState([]);
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // const handleGetData = async () => {
   //   let data = await AsyncStorage.getData('storeDosen');
@@ -36,6 +37,7 @@ function DosenScreen({navigation}) {
       let payload = {
         nama_dosen: params,
       };
+      setLoading(true);
       await AppService.getDosen(payload)
         .then(({data: {result, message}}) => {
           if (message === 'OK') {
@@ -46,7 +48,8 @@ function DosenScreen({navigation}) {
         })
         .catch((err) => {
           throw new Error(err);
-        });
+        })
+        .finally(() => setLoading(false));
     } catch (error) {
       Alert.alert('Error', 'Gagal Mendapatkan Data Dosen');
     }
@@ -64,7 +67,7 @@ function DosenScreen({navigation}) {
 
   return (
     <View style={container}>
-      <View>
+      <ScrollView>
         <View style={titleContainerText}>
           <Headline style={headerStyle}>Dosen</Headline>
           <TextInput
@@ -108,7 +111,9 @@ function DosenScreen({navigation}) {
               ))
             ) : (
               <DataTable.Row style={actionCell}>
-                <DataTable.Cell>No Data Available</DataTable.Cell>
+                <DataTable.Cell>
+                  {loading ? 'Loading ...' : 'No Data Available'}
+                </DataTable.Cell>
               </DataTable.Row>
             )}
           </ScrollView>
@@ -122,7 +127,7 @@ function DosenScreen({navigation}) {
             label="1-3 of 3"
           />
         </DataTable>
-      </View>
+      </ScrollView>
       <View>
         <Button
           icon="plus"

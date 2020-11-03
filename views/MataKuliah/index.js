@@ -24,6 +24,7 @@ const {
 function MatakuliahScreen({navigation}) {
   const [value, setValue] = useState([]);
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // const handleGetData = async () => {
   //   let data = await AsyncStorage.getData('storeMatkul');
@@ -35,6 +36,7 @@ function MatakuliahScreen({navigation}) {
       let payload = {
         name_mk: params,
       };
+      setLoading(true);
       await AppService.getMatkul(payload)
         .then(({data: {result, message}}) => {
           if (message === 'OK') {
@@ -45,7 +47,8 @@ function MatakuliahScreen({navigation}) {
         })
         .catch((err) => {
           throw new Error(err);
-        });
+        })
+        .finally(() => setLoading(false));
     } catch (error) {
       Alert.alert('Error', 'Gagal Mendapatkan Data Matakuliah');
     }
@@ -63,7 +66,7 @@ function MatakuliahScreen({navigation}) {
 
   return (
     <View style={container}>
-      <View>
+      <ScrollView>
         <View style={titleContainerText}>
           <Headline style={headerStyle}>Matakuliah</Headline>
           <TextInput
@@ -115,7 +118,9 @@ function MatakuliahScreen({navigation}) {
               ))
             ) : (
               <DataTable.Row style={actionCell}>
-                <DataTable.Cell>No Data Available</DataTable.Cell>
+                <DataTable.Cell>
+                  {loading ? 'Loading ...' : 'No Data Available'}
+                </DataTable.Cell>
               </DataTable.Row>
             )}
           </ScrollView>
@@ -129,7 +134,7 @@ function MatakuliahScreen({navigation}) {
             label="1-3 of 3"
           />
         </DataTable>
-      </View>
+      </ScrollView>
       <View>
         <Button
           icon="plus"

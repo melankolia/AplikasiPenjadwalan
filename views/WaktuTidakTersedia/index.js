@@ -27,12 +27,12 @@ function HomeScreen({navigation}) {
   ]);
 
   const [check, setCheck] = useState(false);
-
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
 
   return (
     <View style={container}>
-      <View>
+      <ScrollView>
         <View style={titleContainerText}>
           <Headline style={headerStyle}>Waktu Tidak Tersedia</Headline>
           <TextInput
@@ -69,7 +69,9 @@ function HomeScreen({navigation}) {
               ))
             ) : (
               <DataTable.Row style={actionCell}>
-                <DataTable.Cell>No Data Available</DataTable.Cell>
+                <DataTable.Cell>
+                  {loading ? 'Loading ...' : 'No Data Available'}
+                </DataTable.Cell>
               </DataTable.Row>
             )}
           </ScrollView>
@@ -83,7 +85,7 @@ function HomeScreen({navigation}) {
             label="1-3 of 3"
           />
         </DataTable>
-      </View>
+      </ScrollView>
     </View>
   );
 }

@@ -35,7 +35,7 @@ function HomeScreen({navigation}) {
 
   return (
     <View style={container}>
-      <View>
+      <ScrollView>
         <View style={titleContainerText}>
           <Headline>Pengampu</Headline>
         </View>
@@ -94,7 +94,7 @@ function HomeScreen({navigation}) {
             label="1-3 of 3"
           />
         </DataTable>
-      </View>
+      </ScrollView>
       <View>
         <Button
           icon="plus"

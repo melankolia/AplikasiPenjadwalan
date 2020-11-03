@@ -28,6 +28,7 @@ import {
   Login,
   Register,
   test1,
+  Sesi,
 } from './routes';
 
 const Stack = createStackNavigator();
@@ -191,6 +192,11 @@ function App({navigation}) {
           options={{headerShown: false}}
         />
         <Stack.Screen name="Add Waktu" component={AddWaktu} />
+        <Stack.Screen
+          name="Sesi"
+          component={Sesi}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -43,6 +43,9 @@ const AppService = {
     return BaseInstance.post('jadwal-jam', data);
   },
   /// Sesi
+  getSesi(params) {
+    return BaseInstance.query('sesi', {params});
+  },
   createSesi() {
     return BaseInstance.post('jadwal-kuliah/create/sesi');
   },

@@ -24,6 +24,7 @@ const {
 function HomeScreen({navigation}) {
   const [value, setValue] = useState([]);
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // const handleGetData = async () => {
   //   let data = await AsyncStorage.getData('storeJam');
@@ -35,6 +36,7 @@ function HomeScreen({navigation}) {
       let payload = {
         range_jam: params,
       };
+      setLoading(true);
       await AppService.getJam(payload)
         .then(({data: {result, message}}) => {
           if (message === 'OK') {
@@ -45,7 +47,8 @@ function HomeScreen({navigation}) {
         })
         .catch((err) => {
           throw new Error(err);
-        });
+        })
+        .finally(() => setLoading(false));
     } catch (error) {
       Alert.alert('Error', 'Gagal Mendapatkan Data Jam');
     }
@@ -63,7 +66,7 @@ function HomeScreen({navigation}) {
 
   return (
     <View style={container}>
-      <View>
+      <ScrollView>
         <View style={titleContainerText}>
           <Headline style={headerStyle}>Jam</Headline>
           <TextInput
@@ -105,7 +108,9 @@ function HomeScreen({navigation}) {
               ))
             ) : (
               <DataTable.Row style={actionCell}>
-                <DataTable.Cell>No Data Available</DataTable.Cell>
+                <DataTable.Cell>
+                  {loading ? 'Loading ...' : 'No Data Available'}
+                </DataTable.Cell>
               </DataTable.Row>
             )}
           </ScrollView>
@@ -119,7 +124,7 @@ function HomeScreen({navigation}) {
             label="1-3 of 3"
           />
         </DataTable>
-      </View>
+      </ScrollView>
       <View>
         <Button
           icon="plus"
