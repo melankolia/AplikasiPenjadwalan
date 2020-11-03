@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, ScrollView} from 'react-native';
+import {Alert, View, ScrollView} from 'react-native';
 import {
   DataTable,
   Headline,
@@ -9,6 +9,8 @@ import {
   Colors,
 } from 'react-native-paper';
 import AsyncStorage from '../../Helper/AsyncStorage';
+import AppService from '../../services/resources/app.service';
+
 import style from './index.style.js';
 
 const {
@@ -24,9 +26,30 @@ function DosenScreen({navigation}) {
   const [value, setValue] = useState([]);
   const [search, setSearch] = useState('');
 
+  // const handleGetData = async () => {
+  //   let data = await AsyncStorage.getData('storeDosen');
+  //   setValue(data);
+  // };
+
   const handleGetData = async () => {
-    let data = await AsyncStorage.getData('storeDosen');
-    setValue(data);
+    try {
+      let payload = {
+        nama_dosen: search,
+      };
+      await AppService.getDosen(payload)
+        .then(({data: {result, message}}) => {
+          if (message === 'OK') {
+            setValue(result);
+          } else {
+            Alert.alert('Error', 'Gagal Mendapatkan Data Dosen');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      Alert.alert('Error', 'Gagal Mendapatkan Data Dosen');
+    }
   };
 
   const handleRemove = (index) => {
@@ -54,7 +77,6 @@ function DosenScreen({navigation}) {
         </View>
         <DataTable>
           <DataTable.Header>
-            {/* // ROW */}
             <DataTable.Title>NIDN</DataTable.Title>
             <DataTable.Title>Nama</DataTable.Title>
             <DataTable.Title>Telp</DataTable.Title>
@@ -65,9 +87,9 @@ function DosenScreen({navigation}) {
             {value.length > 0 ? (
               value.map((val, index) => (
                 <DataTable.Row key={index}>
-                  <DataTable.Cell>{val.nidn}</DataTable.Cell>
-                  <DataTable.Cell>{val.name}</DataTable.Cell>
-                  <DataTable.Cell>{val.telp}</DataTable.Cell>
+                  <DataTable.Cell>{val.nidn_dosen}</DataTable.Cell>
+                  <DataTable.Cell>{val.nama}</DataTable.Cell>
+                  <DataTable.Cell>{val.telpon}</DataTable.Cell>
                   <DataTable.Cell style={actionCell}>
                     <IconButton
                       icon="pencil"

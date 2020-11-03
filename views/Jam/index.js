@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, ScrollView} from 'react-native';
+import {View, Alert, ScrollView} from 'react-native';
 import {
   DataTable,
   Headline,
@@ -9,6 +9,7 @@ import {
   Colors,
 } from 'react-native-paper';
 import AsyncStorage from '../../Helper/AsyncStorage';
+import AppService from '../../services/resources/app.service';
 import style from './index.style.js';
 
 const {
@@ -24,9 +25,30 @@ function HomeScreen({navigation}) {
   const [value, setValue] = useState([]);
   const [search, setSearch] = useState('');
 
-  const handleGetData = async () => {
-    let data = await AsyncStorage.getData('storeJam');
-    setValue(data);
+  // const handleGetData = async () => {
+  //   let data = await AsyncStorage.getData('storeJam');
+  //   setValue(data);
+  // };
+
+  const handleGetData = async (params) => {
+    try {
+      let payload = {
+        range_jam: params,
+      };
+      await AppService.getJam(payload)
+        .then(({data: {result, message}}) => {
+          if (message === 'OK') {
+            setValue(result);
+          } else {
+            Alert.alert('Error', 'Gagal Mendapatkan Data Jam');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      Alert.alert('Error', 'Gagal Mendapatkan Data Jam');
+    }
   };
 
   const handleRemove = (index) => {
@@ -36,8 +58,8 @@ function HomeScreen({navigation}) {
   };
 
   useEffect(() => {
-    handleGetData();
-  }, []);
+    handleGetData(search);
+  }, [search]);
 
   return (
     <View style={container}>
@@ -63,8 +85,8 @@ function HomeScreen({navigation}) {
             {value.length > 0 ? (
               value.map((val, index) => (
                 <DataTable.Row key={index}>
-                  <DataTable.Cell>{val.no}</DataTable.Cell>
-                  <DataTable.Cell>{val.time}</DataTable.Cell>
+                  <DataTable.Cell>{index + 1}</DataTable.Cell>
+                  <DataTable.Cell>{val.range_jam}</DataTable.Cell>
                   <DataTable.Cell style={actionCell}>
                     <IconButton
                       icon="pencil"

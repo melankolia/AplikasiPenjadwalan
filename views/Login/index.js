@@ -2,9 +2,10 @@
 import React, {useState} from 'react';
 import {Input} from 'react-native-elements';
 import {ScrollView, Text, TouchableOpacity, View, Alert} from 'react-native';
-import AsyncStorage from '../../Helper/AsyncStorage';
+// import AsyncStorage from '../../Helper/AsyncStorage';
 import BackFlat from '../../components/BackFlat';
 import style from './index.style';
+import AppService from '../../services/resources/app.service';
 
 const {
   container,
@@ -22,13 +23,36 @@ const SignIn = ({navigation}) => {
   const [userName, setuserName] = useState('');
   const [password, setpassword] = useState('');
 
+  // const handleLogin = async () => {
+  //   let data = await AsyncStorage.getData('setUpAccount');
+  //   if (userName === data.username && password === data.password) {
+  //     navigation.replace('Home');
+  //   } else {
+  //     Alert.alert('Login Failed', 'Username / Password Salah');
+  //   }
+  // };
+
   const handleLogin = async () => {
-    let data = await AsyncStorage.getData('setUpAccount');
-    console.log(data);
-    if (userName === data.username && password === data.password) {
-      navigation.replace('Home');
-    } else {
-      Alert.alert('Login Failed', 'Username / Password Salah');
+    // try {
+    let payload = {
+      username: userName,
+      password: password,
+    };
+    try {
+      await AppService.login(payload)
+        .then(({data: {message, result}}) => {
+          if (message === 'OK') {
+            navigation.replace('Home');
+          } else {
+            Alert.alert('Login Failed', 'Username / Password Salah');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Error', 'Something went wrong');
     }
   };
 

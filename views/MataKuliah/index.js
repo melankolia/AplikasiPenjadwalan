@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, ScrollView} from 'react-native';
+import {View, Alert, ScrollView} from 'react-native';
 import {
   DataTable,
   Headline,
@@ -9,6 +9,7 @@ import {
   Colors,
 } from 'react-native-paper';
 import AsyncStorage from '../../Helper/AsyncStorage';
+import AppService from '../../services/resources/app.service';
 import style from './index.style.js';
 
 const {
@@ -24,9 +25,30 @@ function MatakuliahScreen({navigation}) {
   const [value, setValue] = useState([]);
   const [search, setSearch] = useState('');
 
+  // const handleGetData = async () => {
+  //   let data = await AsyncStorage.getData('storeMatkul');
+  //   setValue(data);
+  // };
+
   const handleGetData = async () => {
-    let data = await AsyncStorage.getData('storeMatkul');
-    setValue(data);
+    try {
+      let payload = {
+        name_mk: search,
+      };
+      await AppService.getMatkul(payload)
+        .then(({data: {result, message}}) => {
+          if (message === 'OK') {
+            setValue(result);
+          } else {
+            Alert.alert('Error', 'Gagal Mendapatkan Data Matakuliah');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      Alert.alert('Error', 'Gagal Mendapatkan Data Matakuliah');
+    }
   };
 
   const handleRemove = (index) => {
@@ -68,8 +90,8 @@ function MatakuliahScreen({navigation}) {
             {value.length > 0 ? (
               value.map((val, index) => (
                 <DataTable.Row key={index}>
-                  <DataTable.Cell>{val.codeMk}</DataTable.Cell>
-                  <DataTable.Cell>{val.name}</DataTable.Cell>
+                  <DataTable.Cell>{val.kode_mk}</DataTable.Cell>
+                  <DataTable.Cell>{val.name_mk}</DataTable.Cell>
                   <DataTable.Cell numeric>{val.sks}</DataTable.Cell>
                   <DataTable.Cell numeric style={actionCell}>
                     {val.semester}

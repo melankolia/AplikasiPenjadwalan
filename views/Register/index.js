@@ -1,8 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Input} from 'react-native-elements';
-import AsyncStorage from '../../Helper/AsyncStorage';
+// import AsyncStorage from '../../Helper/AsyncStorage';
+import AppService from '../../services/resources/app.service';
 import BackFlat from '../../components/BackFlat';
 import style from './index.style';
 
@@ -24,16 +25,43 @@ const Register = ({navigation}) => {
   const [name, setname] = useState('');
   const [password, setpassword] = useState('');
 
-  function setUpAccount() {
-    let obj = {
+  // function setUpAccount() {
+  //   let obj = {
+  //     username: userName,
+  //     name,
+  //     password,
+  //   };
+  //   console.log(obj);
+  //   AsyncStorage.storeData(obj, 'setUpAccount');
+  //   navigation.navigate('Welcome');
+  // }
+
+  const setUpAccount = async () => {
+    let payload = {
       username: userName,
-      name,
-      password,
+      name: name,
+      password: password,
     };
-    console.log(obj);
-    AsyncStorage.storeData(obj, 'setUpAccount');
-    navigation.navigate('Welcome');
-  }
+    try {
+      await AppService.register(payload)
+        .then(({data: {result, message}}) => {
+          if (message === 'OK') {
+            Alert.alert(
+              'Selamat anda berhasil registrasi,',
+              'Silahkan login dengan akun anda',
+            );
+            navigation.navigate('Welcome');
+          } else {
+            Alert.alert('Error', 'Gagal Registrasi');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      Alert.alert('Error', 'Gagal Registrasi');
+    }
+  };
 
   return (
     <ScrollView>
