@@ -49,6 +49,19 @@ const AppService = {
   createSesi() {
     return BaseInstance.post('jadwal-kuliah/create/sesi');
   },
+  cleanUpSesi() {
+    return BaseInstance.delete('sesi/clean-up');
+  },
+  /// Generate Jadwal Kuliah
+  generateJadwal() {
+    return BaseInstance.post('jadwal-kuliah/create');
+  },
+  getJadwalKuliah(params = '') {
+    return BaseInstance.query('jadwal-kuliah', {params});
+  },
+  cleanUpJadwal() {
+    return BaseInstance.delete('jadwal-kuliah/create');
+  },
 };
 
 export default AppService;

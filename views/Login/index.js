@@ -22,6 +22,7 @@ const {
 const SignIn = ({navigation}) => {
   const [userName, setuserName] = useState('');
   const [password, setpassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // const handleLogin = async () => {
   //   let data = await AsyncStorage.getData('setUpAccount');
@@ -38,6 +39,7 @@ const SignIn = ({navigation}) => {
       username: userName,
       password: password,
     };
+    setLoading(true);
     try {
       await AppService.login(payload)
         .then(({data: {message, result}}) => {
@@ -49,7 +51,8 @@ const SignIn = ({navigation}) => {
         })
         .catch((err) => {
           throw new Error(err);
-        });
+        })
+        .finally(() => setLoading(false));
     } catch (error) {
       console.log(error);
       Alert.alert('Error', 'Something went wrong');
@@ -80,7 +83,10 @@ const SignIn = ({navigation}) => {
             setpassword(e.nativeEvent.text);
           }}
         />
-        <TouchableOpacity style={buttonLogin} onPress={() => handleLogin()}>
+        <TouchableOpacity
+          style={buttonLogin}
+          disabled={loading}
+          onPress={() => handleLogin()}>
           <Text style={textButtonLogin}>Login</Text>
         </TouchableOpacity>
         <Text style={textForget}>Forgot Password ?</Text>

@@ -16,6 +16,7 @@ import Login from '../views/Login';
 import Register from '../views/Register';
 import test1 from '../views/test1';
 import Sesi from '../views/Sesi';
+import JadwalKuliah from '../views/JadwalKuliah';
 
 export {
   Home,
@@ -36,4 +37,5 @@ export {
   Register,
   test1,
   Sesi,
+  JadwalKuliah,
 };

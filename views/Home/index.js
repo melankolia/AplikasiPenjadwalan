@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, ScrollView, TouchableOpacity, Text, Alert} from 'react-native';
 import {Colors, Button} from 'react-native-paper';
 import style from './index.style';
@@ -23,7 +23,7 @@ const Home = ({navigation}) => {
               },
             ]);
           } else {
-            Alert.alert('Error', 'Gagal Create Sesi Inside');
+            Alert.alert('Error', 'Gagal Create Sesi');
           }
         })
         .catch((err) => {
@@ -35,13 +35,66 @@ const Home = ({navigation}) => {
     }
   };
 
-  const deleteSesi = () => {
-    console.log('Delete Sesi');
+  const generateJadwal = async () => {
+    try {
+      setLoading(true);
+      await AppService.generateJadwal()
+        .then(({data: {result, message}}) => {
+          if (message === 'OK') {
+            Alert.alert('Berhasil', 'Berhasil Generate Jadwal Kuliah', [
+              {
+                text: 'OK',
+                onPress: () => {
+                  navigation.replace('JadwalKuliah');
+                },
+              },
+            ]);
+          } else {
+            Alert.alert('Error', 'Gagal Generate Jadwal Kuliah');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        })
+        .finally(() => setLoading(false));
+    } catch (error) {
+      Alert.alert('Error', 'Gagal Generate Jadwal Kuliah');
+    }
   };
 
-  useEffect(() => {
-    console.log('STACK : ', stack);
-  }, [stack]);
+  const deleteSesi = async () => {
+    try {
+      setLoading(true);
+      await AppService.cleanUpSesi()
+        .then(({data: {result, message}}) => {
+          console.log(result);
+          if (message === 'OK') {
+            Alert.alert('Berhasil', 'Berhasil Mengapus Sesi', [
+              {
+                text: 'OK',
+                onPress: () => setStack('initial'),
+              },
+            ]);
+          } else {
+            Alert.alert('Error', 'Gagal Menghapus Sesi');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        })
+        .finally(() => setLoading(false));
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Error', 'Gagal Menghapus Sesi');
+    }
+  };
+
+  const confirmationDelete = () => {
+    Alert.alert('Caution', 'Hapus Data Sesi ?', [
+      {text: 'CANCEL', onPress: () => navigation.navigate('Home')},
+      {text: 'OK', onPress: () => deleteSesi()},
+    ]);
+  };
 
   return (
     <>
@@ -116,20 +169,32 @@ const Home = ({navigation}) => {
             mode="contained"
             color={Colors.red500}
             style={buttonBottom}
+            disabled={loading}
             onPress={(e) => {
               if (stack === 'createSesi') {
                 setStack('initial');
               } else if (stack === 'sesiCreated') {
-                deleteSesi();
+                confirmationDelete();
               }
             }}>
             {stack === 'createSesi' ? 'Back' : 'Delete Sesi'}
           </Button>
+          {stack === 'sesiCreated' && (
+            <Button
+              mode="contained"
+              color={Colors.blueA700}
+              style={buttonBottom}
+              disabled={loading}
+              onPress={(e) => generateJadwal()}>
+              {loading ? 'Loading ...' : 'Generate Jadwal Kuliah'}
+            </Button>
+          )}
           {stack === 'createSesi' && (
             <Button
               mode="contained"
               color={Colors.blueA700}
               style={buttonBottom}
+              disabled={loading}
               onPress={(e) => createSesi()}>
               {loading ? 'Loading ...' : 'Create Sesi'}
             </Button>

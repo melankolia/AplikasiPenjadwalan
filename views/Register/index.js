@@ -47,7 +47,7 @@ const Register = ({navigation}) => {
         .then(({data: {result, message}}) => {
           if (message === 'OK') {
             Alert.alert(
-              'Selamat anda berhasil registrasi,',
+              'Selamat anda berhasil registrasi',
               'Silahkan login dengan akun anda',
             );
             navigation.navigate('Welcome');

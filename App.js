@@ -29,6 +29,7 @@ import {
   Register,
   test1,
   Sesi,
+  JadwalKuliah
 } from './routes';
 
 const Stack = createStackNavigator();
@@ -195,6 +196,11 @@ function App({navigation}) {
         <Stack.Screen
           name="Sesi"
           component={Sesi}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="JadwalKuliah"
+          component={JadwalKuliah}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
