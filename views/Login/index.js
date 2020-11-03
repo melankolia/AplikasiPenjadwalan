@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {Input} from 'react-native-elements';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, View, Alert} from 'react-native';
 import AsyncStorage from '../../Helper/AsyncStorage';
 import BackFlat from '../../components/BackFlat';
 import style from './index.style';
@@ -27,6 +27,8 @@ const SignIn = ({navigation}) => {
     console.log(data);
     if (userName === data.username && password === data.password) {
       navigation.replace('Home');
+    } else {
+      Alert.alert('Login Failed', 'Username / Password Salah');
     }
   };
 

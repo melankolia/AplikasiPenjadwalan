@@ -27,6 +27,7 @@ import {
   WelcomePage,
   Login,
   Register,
+  test1,
 } from './routes';
 
 const Stack = createStackNavigator();
@@ -34,11 +35,11 @@ const Stack = createStackNavigator();
 function App({navigation}) {
   function storeDosen() {
     let obj = [
-      {nidn: '12345678', name: 'Fali', telp: '08127803910'},
-      {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-      {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-      {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
-      {nidn: '12345678', name: 'Dosen 2', telp: '08127803910'},
+      {nidn: '12345678', name: 'Dosen 1', telp: '08127803910', lala: 2},
+      {nidn: '12345678', name: 'Dosen 2', telp: '08127803910', lala: 3},
+      {nidn: '12345678', name: 'Dosen 2', telp: '08127803910', lala: 4},
+      {nidn: '12345678', name: 'Dosen 2', telp: '08127803910', lala: 5},
+      {nidn: '12345678', name: 'Dosen 2', telp: '08127803910', lala: 6},
     ];
     AsyncStorage.storeData(obj, 'storeDosen');
   }
@@ -113,6 +114,12 @@ function App({navigation}) {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        {/* Welcome Page */}
+        {/* <Stack.Screen
+          name="test1"
+          component={test1}
+          options={{headerShown: false}}
+        /> */}
         {/* Welcome Page */}
         <Stack.Screen
           name="Welcome"

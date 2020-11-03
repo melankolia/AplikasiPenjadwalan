@@ -5,6 +5,7 @@ const style = StyleSheet.create({
     flex: 1,
     // borderWidth: 4,
     // borderColor: 'red',
+    // backgroundColor: 'red',
     marginTop: 30,
   },
   box: {

@@ -12,6 +12,7 @@ const Add = ({navigation}) => {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
+  const [lala, setlala] = useState('');
 
   const handleAddData = async () => {
     let data = await AsyncStorage.getData('storeDosen');
@@ -59,6 +60,15 @@ const Add = ({navigation}) => {
           dense
           placeholder="Input Phone"
         />
+        {/* <TextInput
+          mode="outlined"
+          label="lala"
+          value={phone}
+          onChangeText={(text) => setPhone(text)}
+          style={searchStyle}
+          dense
+          placeholder="Input lala"
+        /> */}
       </View>
       <View>
         <Button

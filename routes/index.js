@@ -14,6 +14,7 @@ import AddWaktu from '../views/WaktuTidakTersedia/Add/add';
 import WelcomePage from '../views/WelcomePage';
 import Login from '../views/Login';
 import Register from '../views/Register';
+import test1 from '../views/test1';
 
 export {
   Home,
@@ -32,4 +33,5 @@ export {
   WelcomePage,
   Login,
   Register,
+  test1
 };
