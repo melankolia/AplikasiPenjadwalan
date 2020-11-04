@@ -54,10 +54,25 @@ function HomeScreen({navigation}) {
     }
   };
 
-  const handleRemove = (index) => {
-    let filtered = value.filter((e, i) => i !== index);
-    setValue(filtered);
-    AsyncStorage.storeData(filtered, 'storeRuang');
+  const handleRemove = async (index) => {
+    try {
+      let payload = {
+        id_ruang: index,
+      };
+      await AppService.deleteRuang(payload)
+        .then(({data: {result, message}}) => {
+          if (message === 'OK') {
+            handleGetData();
+          } else {
+            Alert.alert('Error', 'Gagal Menghapus Ruang');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      Alert.alert('Error', 'Gagal Menghapus Ruang');
+    }
   };
 
   useEffect(() => {
@@ -107,7 +122,7 @@ function HomeScreen({navigation}) {
                       icon="delete"
                       color={Colors.red400}
                       size={20}
-                      onPress={() => handleRemove(index)}
+                      onPress={() => handleRemove(val.id_ruang)}
                     />
                   </DataTable.Cell>
                 </DataTable.Row>

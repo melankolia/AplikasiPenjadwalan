@@ -55,10 +55,25 @@ function DosenScreen({navigation}) {
     }
   };
 
-  const handleRemove = (index) => {
-    let filtered = value.filter((e, i) => i !== index);
-    setValue(filtered);
-    AsyncStorage.storeData(filtered, 'storeDosen');
+  const handleRemove = async (index) => {
+    try {
+      let payload = {
+        nidn_dosen: index,
+      };
+      await AppService.deleteDosen(payload)
+        .then(({data: {result, message}}) => {
+          if (message === 'OK') {
+            handleGetData();
+          } else {
+            Alert.alert('Error', 'Gagal Menghapus Data Dosen');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      Alert.alert('Error', 'Gagal Menghapus Data Dosen');
+    }
   };
 
   useEffect(() => {
@@ -104,7 +119,7 @@ function DosenScreen({navigation}) {
                       icon="delete"
                       color={Colors.red400}
                       size={20}
-                      onPress={() => handleRemove(index)}
+                      onPress={() => handleRemove(val.nidn_dosen)}
                     />
                   </DataTable.Cell>
                 </DataTable.Row>

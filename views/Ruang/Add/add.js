@@ -66,7 +66,7 @@ const Add = ({navigation}) => {
           style={searchStyleTop}
           onChangeText={(text) => setCapacity(text)}
           dense
-          placeholder="Input NIDN"
+          placeholder="Input Kapasitas"
         />
         <TextInput
           mode="outlined"

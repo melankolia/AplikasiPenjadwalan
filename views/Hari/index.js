@@ -54,10 +54,25 @@ function HomeScreen({navigation}) {
     }
   };
 
-  const handleRemove = (index) => {
-    let filtered = value.filter((e, i) => i !== index);
-    setValue(filtered);
-    AsyncStorage.storeData(filtered, 'storeHari');
+  const handleRemove = async (index) => {
+    try {
+      let payload = {
+        id_hari: index,
+      };
+      await AppService.deleteHari(payload)
+        .then(({data: {result, message}}) => {
+          if (message === 'OK') {
+            handleGetData();
+          } else {
+            Alert.alert('Error', 'Gagal Menghapus Hari');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      Alert.alert('Error', 'Gagal Menghapus Hari');
+    }
   };
 
   useEffect(() => {
@@ -101,7 +116,7 @@ function HomeScreen({navigation}) {
                       icon="delete"
                       color={Colors.red400}
                       size={20}
-                      onPress={() => handleRemove(index)}
+                      onPress={() => handleRemove(val.id_hari)}
                     />
                   </DataTable.Cell>
                 </DataTable.Row>

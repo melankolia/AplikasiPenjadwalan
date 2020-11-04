@@ -14,12 +14,18 @@ const AppService = {
   createDosen(data) {
     return BaseInstance.post('dosen', data);
   },
+  deleteDosen(params) {
+    return BaseInstance.delete('dosen', {params});
+  },
   /// Mata Kuliah
   getMatkul(params) {
     return BaseInstance.query('mata-kuliah', {params});
   },
   createMatkul(data) {
     return BaseInstance.post('mata-kuliah', data);
+  },
+  deleteMatkul(params) {
+    return BaseInstance.delete('mata-kuliah', {params});
   },
   /// Ruang
   getRuang(params) {
@@ -28,6 +34,9 @@ const AppService = {
   createRuang(data) {
     return BaseInstance.post('ruang', data);
   },
+  deleteRuang(params) {
+    return BaseInstance.delete('ruang', {params});
+  },
   /// Hari
   getHari(params) {
     return BaseInstance.query('jadwal-hari', {params});
@@ -35,12 +44,18 @@ const AppService = {
   createHari(data) {
     return BaseInstance.post('jadwal-hari', data);
   },
+  deleteHari(params) {
+    return BaseInstance.delete('jadwal-hari', {params});
+  },
   /// Jam
   getJam(params) {
     return BaseInstance.query('jadwal-jam', {params});
   },
   createJam(data) {
     return BaseInstance.post('jadwal-jam', data);
+  },
+  deleteJam(params) {
+    return BaseInstance.delete('jadwal-jam', {params});
   },
   /// Sesi
   getSesi(params) {

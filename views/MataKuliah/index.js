@@ -54,12 +54,26 @@ function MatakuliahScreen({navigation}) {
     }
   };
 
-  const handleRemove = (index) => {
-    let filtered = value.filter((e, i) => i !== index);
-    setValue(filtered);
-    AsyncStorage.storeData(filtered, 'storeMatkul');
+  const handleRemove = async (index) => {
+    try {
+      let payload = {
+        id_matkul: index,
+      };
+      await AppService.deleteMatkul(payload)
+        .then(({data: {result, message}}) => {
+          if (message === 'OK') {
+            handleGetData();
+          } else {
+            Alert.alert('Error', 'Gagal Menghapus Data Matakuliah');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      Alert.alert('Error', 'Gagal Menghapus Data Matakuliah');
+    }
   };
-
   useEffect(() => {
     handleGetData(search);
   }, [search]);
@@ -111,7 +125,7 @@ function MatakuliahScreen({navigation}) {
                       icon="delete"
                       color={Colors.red400}
                       size={20}
-                      onPress={() => handleRemove(index)}
+                      onPress={() => handleRemove(val.id_matkul)}
                     />
                   </DataTable.Cell>
                 </DataTable.Row>
