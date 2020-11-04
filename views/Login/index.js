@@ -87,7 +87,9 @@ const SignIn = ({navigation}) => {
           style={buttonLogin}
           disabled={loading}
           onPress={() => handleLogin()}>
-          <Text style={textButtonLogin}>Login</Text>
+          <Text style={textButtonLogin}>
+            {loading ? 'Loading ...' : 'Login'}
+          </Text>
         </TouchableOpacity>
         <Text style={textForget}>Forgot Password ?</Text>
       </View>

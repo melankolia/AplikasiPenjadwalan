@@ -20,6 +20,15 @@ const style = StyleSheet.create({
     marginBottom: 10,
     width: '80%',
   },
+  containerDropdown: {
+    marginVertical: 10,
+    alignItems: 'flex-start',
+    width: '80%',
+  },
+  pickerStyle: {
+    width: '100%',
+    color: Colors.blueA700,
+  },
 });
 
 export default style;

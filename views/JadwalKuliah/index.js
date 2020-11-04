@@ -49,6 +49,7 @@ function MatakuliahScreen({navigation}) {
         })
         .finally(() => setLoading(false));
     } catch (error) {
+      console.log(error);
       Alert.alert('Error', 'Gagal Mendapatkan Data Jadwal Matakuliah');
     }
   };
@@ -107,6 +108,7 @@ function MatakuliahScreen({navigation}) {
             <DataTable.Title numeric style={actionCell}>
               Semester
             </DataTable.Title>
+            <DataTable.Title style={actionCell}>Hari</DataTable.Title>
             <DataTable.Title style={actionCell}>Jam</DataTable.Title>
           </DataTable.Header>
 
@@ -123,6 +125,9 @@ function MatakuliahScreen({navigation}) {
                   </DataTable.Cell>
                   <DataTable.Cell numeric style={actionCell}>
                     {val.semester}
+                  </DataTable.Cell>
+                  <DataTable.Cell style={actionCell}>
+                    {val.nama_hari}
                   </DataTable.Cell>
                   <DataTable.Cell style={actionCell}>{val.jam}</DataTable.Cell>
                 </DataTable.Row>

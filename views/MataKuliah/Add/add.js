@@ -1,12 +1,20 @@
-import React, {useState} from 'react';
-import {View, Alert} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Alert, Text} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import {TextInput, Colors, Button} from 'react-native-paper';
 import AsyncStorage from '../../../Helper/AsyncStorage';
 import AppService from '../../../services/resources/app.service';
 
 import style from './index.style.js';
 
-const {container, searchStyle, searchStyleTop, textContainer} = style;
+const {
+  container,
+  searchStyle,
+  searchStyleTop,
+  textContainer,
+  containerDropdown,
+  pickerStyle,
+} = style;
 
 const Add = ({navigation}) => {
   const [code, setCode] = useState('');
@@ -15,6 +23,9 @@ const Add = ({navigation}) => {
   const [sks, setSKS] = useState('');
   const [semester, setSemester] = useState('');
   const [NIDN_Dosen, setNIDN_Dosen] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState(false);
+  const [listDosen, setListDosen] = useState('');
 
   // const handleAddData = async () => {
   //   let data = await AsyncStorage.getData('storeMatkul');
@@ -22,6 +33,35 @@ const Add = ({navigation}) => {
   //   AsyncStorage.storeData(obj, 'storeMatkul');
   //   navigation.replace('Matakuliah');
   // };
+
+  useEffect(() => {
+    getDataDropdown();
+  }, []);
+
+  const getDataDropdown = async () => {
+    try {
+      setLoading(true);
+      await AppService.getDosen()
+        .then(({data: {message, result}}) => {
+          if (message === 'OK') {
+            setListDosen(result);
+          } else {
+            Alert.alert('Error', 'Gagal Dapat Data Dosen');
+            setErrors(true);
+            console.log(result);
+          }
+        })
+        .catch((err) => {
+          setErrors(true);
+          throw new Error(err);
+        })
+        .finally(() => setLoading(false));
+    } catch (error) {
+      console.log(error);
+      setErrors(true);
+      Alert.alert('Error', 'Gagal Dapat Data Dosen');
+    }
+  };
 
   const handleAddData = async () => {
     try {
@@ -48,6 +88,7 @@ const Add = ({navigation}) => {
           throw new Error(err);
         });
     } catch (error) {
+      console.log(error);
       Alert.alert('Gagal Create Matakuliah', 'Form Mohon Diisi');
     }
   };
@@ -100,7 +141,7 @@ const Add = ({navigation}) => {
           dense
           placeholder="Input Semester"
         />
-        <TextInput
+        {/* <TextInput
           mode="outlined"
           label="Dosen Pengampu"
           value={NIDN_Dosen}
@@ -108,7 +149,23 @@ const Add = ({navigation}) => {
           style={searchStyle}
           dense
           placeholder="NIDN Dosen"
-        />
+        /> */}
+        <View style={containerDropdown}>
+          <Text>Pilih Dosen Pengampu</Text>
+          <Picker
+            selectedValue={NIDN_Dosen}
+            style={pickerStyle}
+            enabled={!loading && !errors}
+            onValueChange={(itemValue) => setNIDN_Dosen(itemValue)}>
+            {listDosen ? (
+              listDosen.map((e, i) => (
+                <Picker.Item label={e.nama} value={e.nidn_dosen} key={i} />
+              ))
+            ) : (
+              <Picker.Item label="No Data" value="1" />
+            )}
+          </Picker>
+        </View>
       </View>
       <View>
         <Button

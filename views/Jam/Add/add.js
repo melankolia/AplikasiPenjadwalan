@@ -39,6 +39,7 @@ const Add = ({navigation}) => {
           throw new Error(err);
         });
     } catch (error) {
+      console.log(error);
       Alert.alert('Gagal Create Jam', 'Form Mohon Diisi');
     }
   };

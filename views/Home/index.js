@@ -67,7 +67,6 @@ const Home = ({navigation}) => {
       setLoading(true);
       await AppService.cleanUpSesi()
         .then(({data: {result, message}}) => {
-          console.log(result);
           if (message === 'OK') {
             Alert.alert('Berhasil', 'Berhasil Mengapus Sesi', [
               {
