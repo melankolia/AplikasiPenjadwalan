@@ -64,7 +64,7 @@ function MatakuliahScreen({navigation}) {
   const handleReset = async () => {
     try {
       setLoading(true);
-      await AppService.cleanUpSesi()
+      await AppService.cleanUpJadwal()
         .then(({data: {result, message}}) => {
           if (message === 'OK') {
             navigation.replace('Home');
@@ -77,6 +77,7 @@ function MatakuliahScreen({navigation}) {
         })
         .finally(() => setLoading(false));
     } catch (error) {
+      console.log(error);
       Alert.alert('Error', 'Gagal Reset Jadwal Matakuliah');
     }
   };
@@ -105,9 +106,7 @@ function MatakuliahScreen({navigation}) {
             <DataTable.Title numeric style={actionCell}>
               SKS
             </DataTable.Title>
-            <DataTable.Title numeric style={actionCell}>
-              Semester
-            </DataTable.Title>
+            <DataTable.Title style={actionCell}>Ruangan</DataTable.Title>
             <DataTable.Title style={actionCell}>Hari</DataTable.Title>
             <DataTable.Title style={actionCell}>Jam</DataTable.Title>
           </DataTable.Header>
@@ -123,8 +122,8 @@ function MatakuliahScreen({navigation}) {
                   <DataTable.Cell numeric style={actionCell}>
                     {val.sks}
                   </DataTable.Cell>
-                  <DataTable.Cell numeric style={actionCell}>
-                    {val.semester}
+                  <DataTable.Cell style={actionCell}>
+                    {val.nama_ruangan}
                   </DataTable.Cell>
                   <DataTable.Cell style={actionCell}>
                     {val.nama_hari}

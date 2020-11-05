@@ -81,10 +81,8 @@ function HomeScreen({navigation}) {
         </View>
         <DataTable style={tableStyle}>
           <DataTable.Header>
+            <DataTable.Title>Ruangan</DataTable.Title>
             <DataTable.Title>Hari</DataTable.Title>
-            <DataTable.Title numeric style={actionCell}>
-              Ruangan
-            </DataTable.Title>
             <DataTable.Title>Jam</DataTable.Title>
           </DataTable.Header>
 
@@ -92,10 +90,8 @@ function HomeScreen({navigation}) {
             {value.length ? (
               value.map((val, index) => (
                 <DataTable.Row key={index}>
+                  <DataTable.Cell>{val.nama_ruangan}</DataTable.Cell>
                   <DataTable.Cell>{val.nama_hari}</DataTable.Cell>
-                  <DataTable.Cell numeric style={actionCell}>
-                    {val.nama_ruangan}
-                  </DataTable.Cell>
                   <DataTable.Cell>{val.range_jam}</DataTable.Cell>
                 </DataTable.Row>
               ))

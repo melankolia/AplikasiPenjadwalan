@@ -162,7 +162,7 @@ const Add = ({navigation}) => {
                 <Picker.Item label={e.nama} value={e.nidn_dosen} key={i} />
               ))
             ) : (
-              <Picker.Item label="No Data" value="1" />
+              <Picker.Item label="No Data" value="" />
             )}
           </Picker>
         </View>

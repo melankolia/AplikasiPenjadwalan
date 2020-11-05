@@ -27,6 +27,9 @@ const style = StyleSheet.create({
   addButton: {
     paddingVertical: 4,
   },
+  containerPicker: {
+    marginHorizontal: 20,
+  },
 });
 
 export default style;

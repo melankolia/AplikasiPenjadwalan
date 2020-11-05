@@ -11,6 +11,9 @@ const AppService = {
   getDosen(params) {
     return BaseInstance.query('dosen', {params});
   },
+  getDosenAvailable() {
+    return BaseInstance.query('dosen/available');
+  },
   createDosen(data) {
     return BaseInstance.post('dosen', data);
   },
@@ -75,7 +78,14 @@ const AppService = {
     return BaseInstance.query('jadwal-kuliah', {params});
   },
   cleanUpJadwal() {
-    return BaseInstance.delete('jadwal-kuliah/create');
+    return BaseInstance.delete('jadwal-kuliah/clean-up');
+  },
+  /// Exception
+  getException(params) {
+    return BaseInstance.query('tidak-bersedia/list', {params});
+  },
+  createException(data, params) {
+    return BaseInstance.post('tidak-bersedia', data, {params});
   },
 };
 
