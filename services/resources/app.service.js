@@ -11,6 +11,9 @@ const AppService = {
   getDosen(params) {
     return BaseInstance.query('dosen', {params});
   },
+  getDetailDosen(params) {
+    return BaseInstance.fetch('dosen', params);
+  },
   getDosenAvailable() {
     return BaseInstance.query('dosen/available');
   },
@@ -24,6 +27,12 @@ const AppService = {
   getMatkul(params) {
     return BaseInstance.query('mata-kuliah', {params});
   },
+  getDetailMatkul(params) {
+    return BaseInstance.fetch('mata-kuliah', params);
+  },
+  countMatkul() {
+    return BaseInstance.query('mata-kuliah/check');
+  },
   createMatkul(data) {
     return BaseInstance.post('mata-kuliah', data);
   },
@@ -33,6 +42,9 @@ const AppService = {
   /// Ruang
   getRuang(params) {
     return BaseInstance.query('ruang', {params});
+  },
+  getDetailRuang(params) {
+    return BaseInstance.fetch('ruang', params);
   },
   createRuang(data) {
     return BaseInstance.post('ruang', data);
@@ -44,6 +56,9 @@ const AppService = {
   getHari(params) {
     return BaseInstance.query('jadwal-hari', {params});
   },
+  getDetailHari(params) {
+    return BaseInstance.fetch('jadwal-hari', params);
+  },
   createHari(data) {
     return BaseInstance.post('jadwal-hari', data);
   },
@@ -53,6 +68,9 @@ const AppService = {
   /// Jam
   getJam(params) {
     return BaseInstance.query('jadwal-jam', {params});
+  },
+  getDetailJam(params) {
+    return BaseInstance.fetch('jadwal-jam', params);
   },
   createJam(data) {
     return BaseInstance.post('jadwal-jam', data);
@@ -76,6 +94,9 @@ const AppService = {
   },
   getJadwalKuliah(params = '') {
     return BaseInstance.query('jadwal-kuliah', {params});
+  },
+  checkMatkul() {
+    return BaseInstance.query('jadwal-kuliah/check');
   },
   cleanUpJadwal() {
     return BaseInstance.delete('jadwal-kuliah/clean-up');

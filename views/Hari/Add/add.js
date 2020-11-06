@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Alert} from 'react-native';
 import AsyncStorage from '../../../Helper/AsyncStorage';
 import AppService from '../../../services/resources/app.service';
@@ -8,8 +8,9 @@ import style from './index.style.js';
 
 const {container, searchStyleTop, textContainer, addButton} = style;
 
-const Add = ({navigation}) => {
+const Add = ({navigation, route}) => {
   const [hari, setHari] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // const handleAddData = async () => {
   //   let data = await AsyncStorage.getData('storeHari');
@@ -23,7 +24,7 @@ const Add = ({navigation}) => {
       let payload = {
         name_hari: hari,
       };
-      console.log(payload);
+      setLoading(true);
       await AppService.createHari(payload)
         .then(({data: {message, result}}) => {
           if (message === 'OK') {
@@ -37,12 +38,39 @@ const Add = ({navigation}) => {
         })
         .catch((err) => {
           throw new Error(err);
-        });
+        })
+        .finally(() => setLoading(false));
     } catch (error) {
       console.log(error);
       Alert.alert('Gagal Create Jam', 'Form Mohon Diisi');
     }
   };
+
+  useEffect(() => {
+    const handleGetData = async (params) => {
+      try {
+        navigation.setOptions({title: 'Update Hari'});
+        setLoading(true);
+        await AppService.getDetailHari(params)
+          .then(({data: {result, message}}) => {
+            if (message === 'OK') {
+              setHari(result?.name_hari);
+            } else {
+              Alert.alert('Error', 'Gagal Mendapatkan Data Hari');
+            }
+          })
+          .catch((err) => {
+            throw new Error(err);
+          })
+          .finally(() => setLoading(false));
+      } catch (error) {
+        Alert.alert('Error', 'Gagal Mendapatkan Data Hari');
+      }
+    };
+
+    const id = route.params?.id_hari;
+    id && handleGetData(id);
+  }, [route.params, navigation]);
 
   return (
     <View style={container}>
@@ -54,6 +82,7 @@ const Add = ({navigation}) => {
           style={searchStyleTop}
           onChangeText={(text) => setHari(text)}
           dense
+          disabled={loading}
           placeholder="Input Hari"
         />
       </View>
@@ -63,8 +92,9 @@ const Add = ({navigation}) => {
           mode="contained"
           color={Colors.blueA700}
           style={addButton}
+          disabled={loading}
           onPress={() => handleAddData()}>
-          Save
+          {loading ? 'Loading ...' : 'Save'}
         </Button>
       </View>
     </View>

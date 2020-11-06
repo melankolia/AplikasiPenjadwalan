@@ -44,7 +44,7 @@ const SignIn = ({navigation}) => {
       await AppService.login(payload)
         .then(({data: {message, result}}) => {
           if (message === 'OK') {
-            navigation.replace('Home');
+            checkJadwal();
           } else {
             Alert.alert('Login Failed', 'Username / Password Salah');
           }
@@ -56,6 +56,29 @@ const SignIn = ({navigation}) => {
     } catch (error) {
       console.log(error);
       Alert.alert('Error', 'Something went wrong');
+    }
+  };
+
+  const checkJadwal = async () => {
+    try {
+      setLoading(true);
+      await AppService.checkMatkul()
+        .then(({data: {message, result}}) => {
+          if (message === 'OK') {
+            result?.TotalJadwal > 0
+              ? navigation.replace('JadwalKuliah')
+              : navigation.replace('Home');
+          } else {
+            Alert.alert('Error', 'Gagal Check Jadwal Matkul');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        })
+        .finally(() => setLoading(false));
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Error', 'Gagal Check Jadwal Matkul');
     }
   };
 

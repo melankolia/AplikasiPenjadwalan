@@ -119,7 +119,11 @@ function MatakuliahScreen({navigation}) {
                       icon="pencil"
                       color={Colors.blueA700}
                       size={20}
-                      onPress={() => console.log('Pressed')}
+                      onPress={() =>
+                        navigation.navigate('Add Matakuliah', {
+                          id_matkul: val.id_matkul,
+                        })
+                      }
                     />
                     <IconButton
                       icon="delete"
@@ -155,7 +159,7 @@ function MatakuliahScreen({navigation}) {
           mode="contained"
           color={Colors.blueA700}
           style={addButton}
-          onPress={() => navigation.replace('Add Matakuliah')}>
+          onPress={() => navigation.navigate('Add Matakuliah')}>
           Add Matakuliah
         </Button>
       </View>

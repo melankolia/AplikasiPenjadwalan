@@ -23,7 +23,7 @@ const Home = ({navigation}) => {
               },
             ]);
           } else {
-            Alert.alert('Error', 'Gagal Create Sesi');
+            Alert.alert('Error', result || 'Gagal Create Sesi');
           }
         })
         .catch((err) => {
@@ -35,11 +35,36 @@ const Home = ({navigation}) => {
     }
   };
 
+  const handlerNext = async () => {
+    try {
+      setLoading(true);
+      await AppService.countMatkul()
+        .then(({data: {result, message}}) => {
+          if (message === 'OK') {
+            if (result?.total) {
+              setStack('createSesi');
+            } else {
+              Alert.alert('Error', 'Matakuliah mohon diisi terlebih dahulu');
+            }
+          } else {
+            Alert.alert('Error', 'Gagal Check Jumlah Matakuliah');
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        })
+        .finally(() => setLoading(false));
+    } catch (error) {
+      Alert.alert('Error', 'Gagal Check Jumlah Matakuliah');
+    }
+  };
+
   const generateJadwal = async () => {
     try {
       setLoading(true);
       await AppService.generateJadwal()
         .then(({data: {result, message}}) => {
+          console.log(result);
           if (message === 'OK') {
             Alert.alert('Berhasil', 'Berhasil Generate Jadwal Kuliah', [
               {
@@ -50,7 +75,7 @@ const Home = ({navigation}) => {
               },
             ]);
           } else {
-            Alert.alert('Error', 'Gagal Generate Jadwal Kuliah');
+            Alert.alert('Error', result || 'Gagal Generate Jadwal Kuliah');
           }
         })
         .catch((err) => {
@@ -112,11 +137,6 @@ const Home = ({navigation}) => {
             </TouchableOpacity>
           </>
         )}
-        {/* <TouchableOpacity
-          onPress={() => navigation.navigate('Dosen')}
-          style={[box, {backgroundColor: '#1b8089'}]}>
-          <Text style={textMenu}>Pengampu</Text>
-        </TouchableOpacity> */}
         {stack === 'createSesi' && (
           <>
             <TouchableOpacity
@@ -157,8 +177,9 @@ const Home = ({navigation}) => {
             mode="contained"
             style={buttonBottom}
             color={Colors.blueA700}
-            onPress={(e) => setStack('createSesi')}>
-            Next
+            disabled={loading}
+            onPress={(e) => handlerNext()}>
+            {loading ? 'Loading ...' : 'Next'}
           </Button>
         </View>
       )}

@@ -113,7 +113,11 @@ function DosenScreen({navigation}) {
                       icon="pencil"
                       color={Colors.blueA700}
                       size={20}
-                      onPress={() => console.log('Pressed')}
+                      onPress={() =>
+                        navigation.navigate('Add Dosen', {
+                          nidn_dosen: val.nidn_dosen,
+                        })
+                      }
                     />
                     <IconButton
                       icon="delete"
@@ -149,7 +153,7 @@ function DosenScreen({navigation}) {
           mode="contained"
           color={Colors.blueA700}
           style={addButton}
-          onPress={() => navigation.replace('Add Dosen')}>
+          onPress={() => navigation.navigate('Add Dosen')}>
           Add Dosen
         </Button>
       </View>

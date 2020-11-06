@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Alert} from 'react-native';
 import AsyncStorage from '../../../Helper/AsyncStorage';
 import AppService from '../../../services/resources/app.service';
@@ -8,12 +8,13 @@ import style from './index.style.js';
 
 const {container, searchStyle, searchStyleTop, textContainer} = style;
 
-const Add = ({navigation}) => {
+const Add = ({navigation, route}) => {
   const [nidn, setNidn] = useState('');
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [lala, setlala] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // const handleAddData = async () => {
   //   let data = await AsyncStorage.getData('storeDosen');
@@ -28,11 +29,12 @@ const Add = ({navigation}) => {
         nama: name,
         telp: phone,
       };
+      setLoading(true);
       await AppService.createDosen(payload)
         .then(({data: {message, result}}) => {
           if (message === 'OK') {
             Alert.alert('Berhasil', 'Dosen Berhasil Ditambahkan', [
-              {text: 'OK', onPress: () => navigation.replace('Dosen')},
+              {text: 'OK', onPress: () => navigation.goBack()},
             ]);
           } else {
             Alert.alert('Gagal Create Dosen', 'Form Mohon Diisi');
@@ -41,12 +43,42 @@ const Add = ({navigation}) => {
         })
         .catch((err) => {
           throw new Error(err);
-        });
+        })
+        .finally(() => setLoading(false));
     } catch (error) {
       console.log(error);
       Alert.alert('Gagal Create Dosen', 'Form Mohon Diisi');
     }
   };
+
+  useEffect(() => {
+    const handleGetData = async (params) => {
+      try {
+        navigation.setOptions({title: 'Update Dosen'});
+        setLoading(true);
+        await AppService.getDetailDosen(params)
+          .then(({data: {result, message}}) => {
+            if (message === 'OK') {
+              setNidn(result?.nidn_dosen);
+              setName(result?.nama);
+              setAddress(result?.address);
+              setPhone(result?.telpon);
+            } else {
+              Alert.alert('Error', 'Gagal Mendapatkan Data Dosen');
+            }
+          })
+          .catch((err) => {
+            throw new Error(err);
+          })
+          .finally(() => setLoading(false));
+      } catch (error) {
+        Alert.alert('Error', 'Gagal Mendapatkan Data Dosen');
+      }
+    };
+
+    const id = route.params?.nidn_dosen;
+    id && handleGetData(id);
+  }, [route.params, navigation]);
 
   return (
     <View style={container}>
@@ -58,6 +90,7 @@ const Add = ({navigation}) => {
           style={searchStyleTop}
           onChangeText={(text) => setNidn(text)}
           dense
+          disabled={loading}
           placeholder="Input NIDN Dosen"
         />
         <TextInput
@@ -67,6 +100,7 @@ const Add = ({navigation}) => {
           onChangeText={(text) => setName(text)}
           style={searchStyle}
           dense
+          disabled={loading}
           placeholder="Input Name"
         />
         <TextInput
@@ -77,6 +111,7 @@ const Add = ({navigation}) => {
           style={searchStyle}
           placeholder="Input Address"
           multiline
+          disabled={loading}
         />
         <TextInput
           mode="outlined"
@@ -86,6 +121,7 @@ const Add = ({navigation}) => {
           style={searchStyle}
           dense
           placeholder="Input Phone"
+          disabled={loading}
         />
         {/* <TextInput
           mode="outlined"
@@ -102,8 +138,9 @@ const Add = ({navigation}) => {
           icon="content-save"
           mode="contained"
           color={Colors.blueA700}
+          disabled={loading}
           onPress={() => handleAddData()}>
-          Save
+          {loading ? 'Loading ...' : 'Save'}
         </Button>
       </View>
     </View>

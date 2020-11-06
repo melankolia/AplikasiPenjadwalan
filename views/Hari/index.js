@@ -110,7 +110,9 @@ function HomeScreen({navigation}) {
                       icon="pencil"
                       color={Colors.blueA700}
                       size={20}
-                      onPress={() => console.log('Pressed')}
+                      onPress={() =>
+                        navigation.navigate('Add Hari', {id_hari: val.id_hari})
+                      }
                     />
                     <IconButton
                       icon="delete"
@@ -146,7 +148,7 @@ function HomeScreen({navigation}) {
           mode="contained"
           color={Colors.blueA700}
           style={addButton}
-          onPress={() => navigation.replace('Add Hari')}>
+          onPress={() => navigation.navigate('Add Hari')}>
           Add Hari
         </Button>
       </View>

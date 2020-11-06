@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Alert} from 'react-native';
 import AsyncStorage from '../../../Helper/AsyncStorage';
 import AppService from '../../../services/resources/app.service';
@@ -8,8 +8,9 @@ import style from './index.style.js';
 
 const {container, searchStyleTop, textContainer} = style;
 
-const Add = ({navigation}) => {
+const Add = ({navigation, route}) => {
   const [time, setTime] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // const handleAddData = async () => {
   //   let data = await AsyncStorage.getData('storeJam');
@@ -44,6 +45,32 @@ const Add = ({navigation}) => {
     }
   };
 
+  useEffect(() => {
+    const handleGetData = async (params) => {
+      try {
+        navigation.setOptions({title: 'Update Jam'});
+        setLoading(true);
+        await AppService.getDetailJam(params)
+          .then(({data: {result, message}}) => {
+            if (message === 'OK') {
+              setTime(result?.range_jam);
+            } else {
+              Alert.alert('Error', 'Gagal Mendapatkan Data Jam');
+            }
+          })
+          .catch((err) => {
+            throw new Error(err);
+          })
+          .finally(() => setLoading(false));
+      } catch (error) {
+        Alert.alert('Error', 'Gagal Mendapatkan Data Jam');
+      }
+    };
+
+    const id = route.params?.id_jam;
+    id && handleGetData(id);
+  }, [route.params, navigation]);
+
   return (
     <View style={container}>
       <View style={textContainer}>
@@ -54,6 +81,7 @@ const Add = ({navigation}) => {
           style={searchStyleTop}
           onChangeText={(text) => setTime(text)}
           dense
+          disabled={loading}
           placeholder="Input Range Jam"
         />
       </View>
@@ -62,8 +90,9 @@ const Add = ({navigation}) => {
           icon="content-save"
           mode="contained"
           color={Colors.blueA700}
+          disabled={loading}
           onPress={() => handleAddData()}>
-          Save
+          {loading ? 'Loading ...' : 'Save'}
         </Button>
       </View>
     </View>

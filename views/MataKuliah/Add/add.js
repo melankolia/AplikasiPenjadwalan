@@ -16,7 +16,7 @@ const {
   pickerStyle,
 } = style;
 
-const Add = ({navigation}) => {
+const Add = ({navigation, route}) => {
   const [code, setCode] = useState('');
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
@@ -35,8 +35,37 @@ const Add = ({navigation}) => {
   // };
 
   useEffect(() => {
+    const handleGetData = async (params) => {
+      try {
+        navigation.setOptions({title: 'Update Matakuliah'});
+        setLoading(true);
+        await AppService.getDetailMatkul(params)
+          .then(({data: {result, message}}) => {
+            if (message === 'OK') {
+              setCode(result.kode_mk);
+              setName(result.name_mk);
+              setCategory(result.jenis);
+              setSKS(result.sks.toString());
+              setSemester(result.semester.toString());
+              setNIDN_Dosen(result.nidn_dosen);
+            } else {
+              Alert.alert('Error', 'Gagal Mendapatkan Data Matakuliah');
+            }
+          })
+          .catch((err) => {
+            throw new Error(err);
+          })
+          .finally(() => setLoading(false));
+      } catch (error) {
+        Alert.alert('Error', 'Gagal Mendapatkan Data Matakuliah');
+      }
+    };
+
     getDataDropdown();
-  }, []);
+
+    const id = route.params?.id_matkul;
+    id && handleGetData(id);
+  }, [route.params, navigation]);
 
   const getDataDropdown = async () => {
     try {
@@ -44,6 +73,7 @@ const Add = ({navigation}) => {
       await AppService.getDosen()
         .then(({data: {message, result}}) => {
           if (message === 'OK') {
+            result[0] && setNIDN_Dosen(result[0].nidn_dosen);
             setListDosen(result);
           } else {
             Alert.alert('Error', 'Gagal Dapat Data Dosen');
@@ -77,7 +107,7 @@ const Add = ({navigation}) => {
         .then(({data: {message, result}}) => {
           if (message === 'OK') {
             Alert.alert('Berhasil', 'Mata Kuliah Berhasil Ditambahkan', [
-              {text: 'OK', onPress: () => navigation.replace('Matakuliah')},
+              {text: 'OK', onPress: () => navigation.goBack()},
             ]);
           } else {
             Alert.alert('Gagal Create Matakuliah', 'Form Mohon Diisi');
@@ -103,6 +133,7 @@ const Add = ({navigation}) => {
           style={searchStyleTop}
           onChangeText={(text) => setCode(text)}
           dense
+          disabled={loading}
           placeholder="Input Kode Matakuliah"
         />
         <TextInput
@@ -112,6 +143,7 @@ const Add = ({navigation}) => {
           onChangeText={(text) => setName(text)}
           style={searchStyle}
           dense
+          disabled={loading}
           placeholder="Input Name"
         />
         <TextInput
@@ -122,6 +154,7 @@ const Add = ({navigation}) => {
           style={searchStyle}
           placeholder="Input Kategori"
           multiline
+          disabled={loading}
         />
         <TextInput
           mode="outlined"
@@ -130,6 +163,7 @@ const Add = ({navigation}) => {
           onChangeText={(text) => setSKS(text)}
           style={searchStyle}
           dense
+          disabled={loading}
           placeholder="Input SKS"
         />
         <TextInput
@@ -139,6 +173,7 @@ const Add = ({navigation}) => {
           onChangeText={(text) => setSemester(text)}
           style={searchStyle}
           dense
+          disabled={loading}
           placeholder="Input Semester"
         />
         {/* <TextInput
@@ -172,8 +207,9 @@ const Add = ({navigation}) => {
           icon="content-save"
           mode="contained"
           color={Colors.blueA700}
+          disabled={loading}
           onPress={() => handleAddData()}>
-          Save
+          {loading ? 'Loading ...' : 'Save'}
         </Button>
       </View>
     </View>
