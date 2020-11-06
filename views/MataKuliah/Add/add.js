@@ -107,7 +107,7 @@ const Add = ({navigation, route}) => {
         .then(({data: {message, result}}) => {
           if (message === 'OK') {
             Alert.alert('Berhasil', 'Mata Kuliah Berhasil Ditambahkan', [
-              {text: 'OK', onPress: () => navigation.goBack()},
+              {text: 'OK', onPress: () => navigation.push('Matakuliah')},
             ]);
           } else {
             Alert.alert('Gagal Create Matakuliah', 'Form Mohon Diisi');
@@ -121,6 +121,43 @@ const Add = ({navigation, route}) => {
       console.log(error);
       Alert.alert('Gagal Create Matakuliah', 'Form Mohon Diisi');
     }
+  };
+
+  const handleUpdateData = async () => {
+    try {
+      let payload = {
+        kode_mk: code,
+        name_mk: name,
+        jenis: category,
+        sks: sks,
+        semester: semester,
+        nidn_dosen: NIDN_Dosen,
+      };
+      const id = route.params?.id_matkul;
+
+      await AppService.updateMatkul(id, payload)
+        .then(({data: {message, result}}) => {
+          if (message === 'OK') {
+            Alert.alert('Berhasil', 'Mata Kuliah Berhasil DiUpdate', [
+              {text: 'OK', onPress: () => navigation.push('Matakuliah')},
+            ]);
+          } else {
+            Alert.alert('Gagal Update Matakuliah', 'Form Mohon Diisi');
+            console.log(result);
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Gagal Update Matakuliah', 'Form Mohon Diisi');
+    }
+  };
+
+  const handleSave = () => {
+    const id = route.params?.id_matkul;
+    id ? handleUpdateData() : handleAddData();
   };
 
   return (
@@ -208,7 +245,7 @@ const Add = ({navigation, route}) => {
           mode="contained"
           color={Colors.blueA700}
           disabled={loading}
-          onPress={() => handleAddData()}>
+          onPress={() => handleSave()}>
           {loading ? 'Loading ...' : 'Save'}
         </Button>
       </View>

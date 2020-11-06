@@ -16,7 +16,7 @@ const Add = ({navigation, route}) => {
   //   let data = await AsyncStorage.getData('storeHari');
   //   let obj = [...data, {hari}];
   //   AsyncStorage.storeData(obj, 'storeHari');
-  //   navigation.replace('Hari');
+  //   navigation.push('Hari');
   // };
 
   const handleAddData = async () => {
@@ -29,7 +29,7 @@ const Add = ({navigation, route}) => {
         .then(({data: {message, result}}) => {
           if (message === 'OK') {
             Alert.alert('Berhasil', 'Hari Berhasil Ditambahkan', [
-              {text: 'OK', onPress: () => navigation.replace('Hari')},
+              {text: 'OK', onPress: () => navigation.push('Hari')},
             ]);
           } else {
             Alert.alert('Gagal Create Hari', 'Form Mohon Diisi');
@@ -43,6 +43,35 @@ const Add = ({navigation, route}) => {
     } catch (error) {
       console.log(error);
       Alert.alert('Gagal Create Jam', 'Form Mohon Diisi');
+    }
+  };
+
+  const handleUpdateData = async () => {
+    try {
+      let payload = {
+        name_hari: hari,
+      };
+      const id = route.params?.id_hari;
+
+      setLoading(true);
+      await AppService.updateHari(id, payload)
+        .then(({data: {message, result}}) => {
+          if (message === 'OK') {
+            Alert.alert('Berhasil', 'Hari Berhasil DiUpdate', [
+              {text: 'OK', onPress: () => navigation.push('Hari')},
+            ]);
+          } else {
+            Alert.alert('Gagal Update Hari', 'Form Mohon Diisi');
+            console.log(result);
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        })
+        .finally(() => setLoading(false));
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Gagal Update Hari', 'Form Mohon Diisi');
     }
   };
 
@@ -72,6 +101,11 @@ const Add = ({navigation, route}) => {
     id && handleGetData(id);
   }, [route.params, navigation]);
 
+  const handleSave = () => {
+    const id = route.params?.id_hari;
+    id ? handleUpdateData() : handleAddData();
+  };
+
   return (
     <View style={container}>
       <View style={textContainer}>
@@ -93,7 +127,7 @@ const Add = ({navigation, route}) => {
           color={Colors.blueA700}
           style={addButton}
           disabled={loading}
-          onPress={() => handleAddData()}>
+          onPress={() => handleSave()}>
           {loading ? 'Loading ...' : 'Save'}
         </Button>
       </View>

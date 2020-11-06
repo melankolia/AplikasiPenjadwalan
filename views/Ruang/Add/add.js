@@ -32,7 +32,7 @@ const Add = ({navigation, route}) => {
         .then(({data: {message, result}}) => {
           if (message === 'OK') {
             Alert.alert('Berhasil', 'Ruang Berhasil Ditambahkan', [
-              {text: 'OK', onPress: () => navigation.goBack()},
+              {text: 'OK', onPress: () => navigation.push('Ruang')},
             ]);
           } else {
             Alert.alert('Gagal Create Ruang', 'Form Mohon Diisi');
@@ -45,6 +45,34 @@ const Add = ({navigation, route}) => {
     } catch (error) {
       console.log(error);
       Alert.alert('Gagal Create Ruang', 'Form Mohon Diisi');
+    }
+  };
+
+  const handleUpdateData = async () => {
+    try {
+      let payload = {
+        name_ruangan: name,
+        kapasitas: capacity,
+        jenis: type,
+      };
+      const id = route.params?.id_ruang;
+      await AppService.updateRuang(id, payload)
+        .then(({data: {message, result}}) => {
+          if (message === 'OK') {
+            Alert.alert('Berhasil', 'Ruang Berhasil DiUpdate', [
+              {text: 'OK', onPress: () => navigation.push('Ruang')},
+            ]);
+          } else {
+            Alert.alert('Gagal Update Ruang', 'Form Mohon Diisi');
+            console.log(result);
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Gagal Update Ruang', 'Form Mohon Diisi');
     }
   };
 
@@ -75,6 +103,11 @@ const Add = ({navigation, route}) => {
     const id = route.params?.id_ruang;
     id && handleGetData(id);
   }, [route.params, navigation]);
+
+  const handleSave = () => {
+    const id = route.params?.id_ruang;
+    id ? handleUpdateData() : handleAddData();
+  };
 
   return (
     <View style={container}>
@@ -116,7 +149,7 @@ const Add = ({navigation, route}) => {
           mode="contained"
           color={Colors.blueA700}
           disabled={loading}
-          onPress={() => handleAddData()}>
+          onPress={() => handleSave()}>
           {loading ? 'Loading ...' : 'Save'}
         </Button>
       </View>

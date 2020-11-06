@@ -20,12 +20,13 @@ const Add = ({navigation, route}) => {
   //   let data = await AsyncStorage.getData('storeDosen');
   //   let obj = [...data, {nidn, name, telp: phone}];
   //   AsyncStorage.storeData(obj, 'storeDosen');
-  //   navigation.replace('Dosen');
+  //   navigation.pop();
   // };
   const handleAddData = async () => {
     try {
       let payload = {
         nidn_dosen: nidn,
+        address: address,
         nama: name,
         telp: phone,
       };
@@ -34,7 +35,7 @@ const Add = ({navigation, route}) => {
         .then(({data: {message, result}}) => {
           if (message === 'OK') {
             Alert.alert('Berhasil', 'Dosen Berhasil Ditambahkan', [
-              {text: 'OK', onPress: () => navigation.goBack()},
+              {text: 'OK', onPress: () => navigation.push('Dosen')},
             ]);
           } else {
             Alert.alert('Gagal Create Dosen', 'Form Mohon Diisi');
@@ -49,6 +50,42 @@ const Add = ({navigation, route}) => {
       console.log(error);
       Alert.alert('Gagal Create Dosen', 'Form Mohon Diisi');
     }
+  };
+
+  const handleUpdateData = async () => {
+    try {
+      let payload = {
+        nidn_dosen: nidn,
+        address: address,
+        nama: name,
+        telp: phone,
+      };
+      const id = route.params?.nidn_dosen;
+      setLoading(true);
+      await AppService.updateDosen(id, payload)
+        .then(({data: {message, result}}) => {
+          if (message === 'OK') {
+            Alert.alert('Berhasil', 'Dosen Berhasil DiUpdate', [
+              {text: 'OK', onPress: () => navigation.push('Dosen')},
+            ]);
+          } else {
+            Alert.alert('Gagal Update Dosen', 'Form Mohon Diisi');
+            console.log(result);
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        })
+        .finally(() => setLoading(false));
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Gagal Update Dosen', 'Form Mohon Diisi');
+    }
+  };
+
+  const handleSave = () => {
+    const id = route.params?.nidn_dosen;
+    id ? handleUpdateData() : handleAddData();
   };
 
   useEffect(() => {
@@ -139,7 +176,7 @@ const Add = ({navigation, route}) => {
           mode="contained"
           color={Colors.blueA700}
           disabled={loading}
-          onPress={() => handleAddData()}>
+          onPress={() => handleSave()}>
           {loading ? 'Loading ...' : 'Save'}
         </Button>
       </View>

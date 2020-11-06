@@ -16,7 +16,7 @@ const Add = ({navigation, route}) => {
   //   let data = await AsyncStorage.getData('storeJam');
   //   let obj = [...data, {time}];
   //   AsyncStorage.storeData(obj, 'storeJam');
-  //   navigation.replace('Jam');
+  //   navigation.push('Jam');
   // };
 
   const handleAddData = async () => {
@@ -29,7 +29,7 @@ const Add = ({navigation, route}) => {
         .then(({data: {message, result}}) => {
           if (message === 'OK') {
             Alert.alert('Berhasil', 'Jam Berhasil Ditambahkan', [
-              {text: 'OK', onPress: () => navigation.replace('Jam')},
+              {text: 'OK', onPress: () => navigation.push('Jam')},
             ]);
           } else {
             Alert.alert('Gagal Create Jam', 'Form Mohon Diisi');
@@ -42,6 +42,32 @@ const Add = ({navigation, route}) => {
     } catch (error) {
       console.log(error);
       Alert.alert('Gagal Create Jam', 'Form Mohon Diisi');
+    }
+  };
+
+  const handleUpdateData = async () => {
+    try {
+      let payload = {
+        range_jam: time,
+      };
+      const id = route.params?.id_jam;
+      await AppService.updateJam(id, payload)
+        .then(({data: {message, result}}) => {
+          if (message === 'OK') {
+            Alert.alert('Berhasil', 'Jam Berhasil DiUpdate', [
+              {text: 'OK', onPress: () => navigation.push('Jam')},
+            ]);
+          } else {
+            Alert.alert('Gagal Update Jam', 'Form Mohon Diisi');
+            console.log(result);
+          }
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Gagal Update Jam', 'Form Mohon Diisi');
     }
   };
 
@@ -71,6 +97,11 @@ const Add = ({navigation, route}) => {
     id && handleGetData(id);
   }, [route.params, navigation]);
 
+  const handleSave = () => {
+    const id = route.params?.id_jam;
+    id ? handleUpdateData() : handleAddData();
+  };
+
   return (
     <View style={container}>
       <View style={textContainer}>
@@ -91,7 +122,7 @@ const Add = ({navigation, route}) => {
           mode="contained"
           color={Colors.blueA700}
           disabled={loading}
-          onPress={() => handleAddData()}>
+          onPress={() => handleSave()}>
           {loading ? 'Loading ...' : 'Save'}
         </Button>
       </View>
