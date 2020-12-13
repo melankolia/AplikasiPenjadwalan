@@ -36,6 +36,14 @@ const Register = ({navigation}) => {
   //   navigation.navigate('Welcome');
   // }
 
+  const handleRegister = () => {
+    if (userName && password) {
+      setUpAccount();
+    } else {
+      Alert.alert('Error', 'Silahkan isi Username dan Password');
+    }
+  };
+
   const setUpAccount = async () => {
     let payload = {
       username: userName,
@@ -104,7 +112,9 @@ const Register = ({navigation}) => {
             setpassword(e.nativeEvent.text);
           }}
         />
-        <TouchableOpacity style={registerStyle} onPress={() => setUpAccount()}>
+        <TouchableOpacity
+          style={registerStyle}
+          onPress={() => handleRegister()}>
           <Text style={textRegister}>Register</Text>
         </TouchableOpacity>
         <Text style={textPolicy}>

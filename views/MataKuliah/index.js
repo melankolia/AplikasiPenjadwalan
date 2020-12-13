@@ -142,15 +142,6 @@ function MatakuliahScreen({navigation}) {
               </DataTable.Row>
             )}
           </ScrollView>
-
-          <DataTable.Pagination
-            page={1}
-            numberOfPages={3}
-            onPageChange={(page) => {
-              console.log(page);
-            }}
-            label="1-3 of 3"
-          />
         </DataTable>
       </ScrollView>
       <View>

@@ -44,6 +44,7 @@ const SignIn = ({navigation}) => {
       await AppService.login(payload)
         .then(({data: {message, result}}) => {
           if (message === 'OK') {
+            // Check Jadwal
             checkJadwal();
           } else {
             Alert.alert('Login Failed', 'Username / Password Salah');
