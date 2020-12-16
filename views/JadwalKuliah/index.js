@@ -24,11 +24,20 @@ function MatakuliahScreen({navigation}) {
   const [value, setValue] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState({
+    name: 'mahasiswa',
+    role: 'mahasiswa',
+    username: 'mahasiswa',
+  });
 
   // const handleGetData = async () => {
   //   let data = await AsyncStorage.getData('storeMatkul');
   //   setValue(data);
   // };
+  const handleGetUserDetail = async () => {
+    let data = await AsyncStorage.getData('userDetail');
+    setUser(data);
+  };
 
   const handleGetData = async (params) => {
     try {
@@ -86,6 +95,10 @@ function MatakuliahScreen({navigation}) {
     handleGetData(search);
   }, [search]);
 
+  useEffect(() => {
+    handleGetUserDetail();
+  }, []);
+
   return (
     <View style={container}>
       <ScrollView>
@@ -142,14 +155,16 @@ function MatakuliahScreen({navigation}) {
         </DataTable>
       </ScrollView>
       <View>
-        <Button
-          mode="contained"
-          color={Colors.redA700}
-          style={addButton}
-          disabled={loading}
-          onPress={() => confirmationDelete()}>
-          Reset Jadwal Matakuliah
-        </Button>
+        {user?.role === 'admin' && (
+          <Button
+            mode="contained"
+            color={Colors.redA700}
+            style={addButton}
+            disabled={loading}
+            onPress={() => confirmationDelete()}>
+            Reset Jadwal Matakuliah
+          </Button>
+        )}
       </View>
     </View>
   );

@@ -2,7 +2,7 @@
 import React, {useState} from 'react';
 import {Input} from 'react-native-elements';
 import {ScrollView, Text, TouchableOpacity, View, Alert} from 'react-native';
-// import AsyncStorage from '../../Helper/AsyncStorage';
+import AsyncStorage from '../../Helper/AsyncStorage';
 import BackFlat from '../../components/BackFlat';
 import style from './index.style';
 import AppService from '../../services/resources/app.service';
@@ -45,7 +45,10 @@ const SignIn = ({navigation}) => {
         .then(({data: {message, result}}) => {
           if (message === 'OK') {
             // Check Jadwal
-            checkJadwal();
+            AsyncStorage.storeData(result, 'userDetail');
+            result?.role === 'admin'
+              ? checkJadwal()
+              : navigation.replace('JadwalKuliah');
           } else {
             Alert.alert('Login Failed', 'Username / Password Salah');
           }

@@ -29,7 +29,7 @@ import {
   Register,
   test1,
   Sesi,
-  JadwalKuliah
+  JadwalKuliah,
 } from './routes';
 
 const Stack = createStackNavigator();
